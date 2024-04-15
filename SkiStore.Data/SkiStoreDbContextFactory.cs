@@ -13,16 +13,18 @@ namespace SkiStore.Data
 {
     public class SkiStoreDbContextFactory : IDesignTimeDbContextFactory<SkiStoreDbContext>
     {
-        private readonly IConfiguration _configuration;
+      
 
-        public SkiStoreDbContextFactory(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+    
+
         public SkiStoreDbContext CreateDbContext(string[] args)
         {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("F:\\MyWork\\API\\SkiStore\\SkiStore.API\\appsettings.json", false, true)
+                .Build();
             var optionBuilder = new DbContextOptionsBuilder<SkiStoreDbContext>();
-            optionBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
+            optionBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             return new SkiStoreDbContext(optionBuilder.Options);
         }
     }
