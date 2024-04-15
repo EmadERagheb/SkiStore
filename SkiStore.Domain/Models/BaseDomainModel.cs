@@ -14,6 +14,6 @@ namespace SkiStore.Domain.Models
         [Timestamp]
         public byte[] Version { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set;}
+        public DateTime UpdatedDate { get; set; }
     }
 }
