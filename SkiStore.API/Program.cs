@@ -6,7 +6,7 @@ namespace SkiStore.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +54,25 @@ namespace SkiStore.API
 
 
             app.MapControllers();
+
+
+            #region Insure DataBase Exists And Seeds Before Run Application
+            using var scope = app.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var context = services.GetRequiredService<SkiStoreDbContext>();
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            try
+            {
+                await context.Database.MigrateAsync();
+            }
+            catch (Exception ex)
+            {
+
+                logger.LogError(ex, "An Error occurred During Migration");
+            }
+
+
+            #endregion
 
             app.Run();
         }
