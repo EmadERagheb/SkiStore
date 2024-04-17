@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using SkiStore.API.Helper;
 using SkiStore.Data;
 
 namespace SkiStore.API
@@ -37,6 +38,10 @@ namespace SkiStore.API
                 }
             }
             );
+
+            #endregion
+            #region AutoMapper
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
             #endregion
 
             var app = builder.Build();
