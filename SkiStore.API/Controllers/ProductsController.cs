@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SkiStore.API.DTOs.Product;
 using SkiStore.Data;
+using SkiStore.Domain.Contracts;
 using SkiStore.Domain.Models;
 
 namespace SkiStore.API.Controllers
@@ -14,18 +16,19 @@ namespace SkiStore.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly SkiStoreDbContext _context;
+        private readonly IProductRepository _productRepository;
 
-        public ProductsController(SkiStoreDbContext context)
+     
+        public ProductsController(IProductRepository productRepository)
         {
-            _context = context;
+            _productRepository = productRepository;
         }
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<GetProductDTO>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            return await _productRepository.GetAllAsync<GetProductDTO>();
         }
 
         // GET: api/Products/5

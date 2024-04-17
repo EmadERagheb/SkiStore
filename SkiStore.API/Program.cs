@@ -1,7 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
-using SkiStore.API.Helper;
 using SkiStore.Data;
+using SkiStore.Data.Helper;
+using SkiStore.Data.Repositories;
+using SkiStore.Domain.Contracts;
 
 namespace SkiStore.API
 {
@@ -38,7 +40,8 @@ namespace SkiStore.API
                 }
             }
             );
-
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
             #endregion
             #region AutoMapper
             builder.Services.AddAutoMapper(typeof(MappingProfile));

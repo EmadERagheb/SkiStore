@@ -1,4 +1,4 @@
-﻿namespace SkiStore.API.DTOs.Product
+﻿namespace SkiStore.Data.DTOs.Product
 {
     public class BaseProductDTO
     {
