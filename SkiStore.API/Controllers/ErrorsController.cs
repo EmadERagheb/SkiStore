@@ -5,10 +5,10 @@ using SkiStore.API.Errors;
 namespace SkiStore.API.Controllers
 {
     [Route("errors/{code}")]
-    [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorsController : BaseController
     {
-        [HttpGet]
+      
         public ActionResult Error(int code)
         {
             return new ObjectResult(new APIResponse (code));

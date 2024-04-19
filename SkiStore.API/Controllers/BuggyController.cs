@@ -9,7 +9,6 @@ namespace SkiStore.API.Controllers
     public class BuggyController : BaseController
     {
         private readonly SkiStoreDbContext _context;
-
         public BuggyController(SkiStoreDbContext context)
         {
             _context = context;
