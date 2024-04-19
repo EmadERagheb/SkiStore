@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using SkiStore.API.MiddleWares;
 using SkiStore.Data;
 using SkiStore.Data.Helper;
 using SkiStore.Data.Repositories;
@@ -49,6 +50,9 @@ namespace SkiStore.API
 
             var app = builder.Build();
 
+            // this is used to handle 404 endpoints
+            app.UseMiddleware<ExceptionMiddleWare>();
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
