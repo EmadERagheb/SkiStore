@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SkiStore.Data;
+using SkiStore.Data.DTOs.Product;
+using SkiStore.Domain.Contracts;
 using SkiStore.Domain.Models;
 
 namespace SkiStore.API.Controllers
@@ -14,53 +10,78 @@ namespace SkiStore.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly SkiStoreDbContext _context;
+        private readonly IProductRepository _productRepository;
 
-        public ProductsController(SkiStoreDbContext context)
+        private readonly IConfiguration _configuration;
+
+        public ProductsController(IProductRepository productRepository, IConfiguration configuration)
         {
-            _context = context;
+            _productRepository = productRepository;
+
+            _configuration = configuration;
         }
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<GetProductDTO>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+
+            var products = (await _productRepository.GetAllAsync<GetProductDTO>());
+            products.ForEach(q => q.PictureUrl = _configuration["APIURL"] + q.PictureUrl);
+            return Ok(products);
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<GetProductDTO>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productRepository.GetAsync<GetProductDTO>(p => p.Id == id);
 
-            if (product == null)
+            if (product is null)
             {
                 return NotFound();
             }
-
+            product.PictureUrl = _configuration["APIURL"] + product.PictureUrl;
             return product;
+        }
+
+        // POST: api/Products
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<ProductDTO>> PostProduct(PostProductDTO product)
+
+        {
+            try
+            {
+                var newProduct = await _productRepository.AddAsync<PostProductDTO, ProductDTO>(product);
+                newProduct.PictureUrl = _configuration["APIURL"] + product.PictureUrl;
+
+                return CreatedAtAction("GetProduct", new { id = newProduct.Id }, newProduct);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        public async Task<IActionResult> PutProduct(int id, ProductDTO product)
         {
             if (id != product.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(product).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                if (await _productRepository.UpdateAsync(id, product) == 0)
+                    return NotFound();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (!await ProductExists(id))
                 {
                     return NotFound();
                 }
@@ -69,40 +90,32 @@ namespace SkiStore.API.Controllers
                     throw;
                 }
             }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
             return NoContent();
-        }
-
-        // POST: api/Products
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
-        {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+
+
+            var product = await _productRepository.GetAsync<Product>(q => q.Id == id);
+            if (product is null)
             {
                 return NotFound();
             }
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
+            await _productRepository.DeleteAsync(product);
             return NoContent();
         }
 
-        private bool ProductExists(int id)
+        private async Task<bool> ProductExists(int id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return await _productRepository.Exists(q => q.Id == id);
         }
     }
 }

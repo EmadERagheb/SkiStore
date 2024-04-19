@@ -13,9 +13,6 @@ namespace SkiStore.Data
 {
     public class SkiStoreDbContextFactory : IDesignTimeDbContextFactory<SkiStoreDbContext>
     {
-      
-
-    
 
         public SkiStoreDbContext CreateDbContext(string[] args)
         {
