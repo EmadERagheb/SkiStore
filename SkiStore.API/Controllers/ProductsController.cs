@@ -8,7 +8,7 @@ namespace SkiStore.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseController
     {
         private readonly IProductRepository _productRepository;
 
