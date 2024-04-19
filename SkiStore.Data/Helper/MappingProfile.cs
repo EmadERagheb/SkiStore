@@ -1,22 +1,24 @@
 ﻿
 using AutoMapper;
-using SkiStore.API.DTOs.Product;
+using Microsoft.Extensions.Configuration;
+using SkiStore.Data.DTOs.Product;
 using SkiStore.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SkiStore.Data.Helper
 {
-    public class MappingProfile:Profile
+    public class MappingProfile : Profile
     {
+       
+
         public MappingProfile()
         {
+
             CreateMap<Product, GetProductDTO>()
                  .ForMember(d => d.Brand, o => o.MapFrom(s => s.Brand.Name))
-                 .ForMember(q => q.ProductType, o => o.MapFrom(s => s.ProductType.Name));
+                 .ForMember(q => q.ProductType, o => o.MapFrom(s => s.ProductType.Name))
+                 .ForMember(q => q.PictureUrl, o => o.MapFrom<PictureURLResolver>());
+            CreateMap<Product, ProductDTO>().ReverseMap();
+            CreateMap<PostProductDTO, Product>().ReverseMap();
         }
     }
 }

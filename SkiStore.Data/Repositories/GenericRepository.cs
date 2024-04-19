@@ -52,10 +52,24 @@ namespace SkiStore.Data.Repositories
             T item = _mapper.Map<T>(entity);
             await _context.AddAsync(item);
             await _context.SaveChangesAsync();
-            return _mapper.Map<TResult>(item);
+            var result= _mapper.Map<TResult>(item);
+            return result;
 
         }
 
+        public async Task<int> UpdateAsync<TSource>(int id, TSource source)
+        {
+            T entity = await _context.Set<T>().FindAsync(id);
+            if (entity is not null)
+            {
+                _mapper.Map(source, entity);
+                _context.Update(entity);
+                return await _context.SaveChangesAsync();
+            }
+            else
+                return 0;
+
+        }
         public async Task DeleteAsync(T entity)
         {
             _context.Entry(entity).State = EntityState.Deleted;
@@ -90,18 +104,5 @@ namespace SkiStore.Data.Repositories
 
 
 
-        public async Task<int> UpdateAsync<TSource>(int id, TSource source)
-        {
-            T entity = await _context.Set<T>().FindAsync(id);
-            if (entity is not null)
-            {
-                _mapper.Map(source, entity);
-                _context.Update(entity);
-                return await _context.SaveChangesAsync();
-            }
-            else
-                return 0;
-
-        }
     }
 }
