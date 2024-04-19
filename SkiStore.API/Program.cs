@@ -1,5 +1,7 @@
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SkiStore.API.Errors;
 using SkiStore.API.MiddleWares;
 using SkiStore.Data;
 using SkiStore.Data.Helper;
@@ -47,6 +49,29 @@ namespace SkiStore.API
             #region AutoMapper
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             #endregion
+
+            #region Override APIController Attribute Behavior
+            // I Don't like it till 
+            // it flat error that return at errors array
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var error = actionContext.ModelState.Where(e => e.Value.Errors.Count > 0)
+                     .SelectMany(e => e.Value.Errors)
+                     .Select(e => e.ErrorMessage).ToArray();
+                    var errorResponse = new APIValidationErrorResponse(error);
+                    return new BadRequestObjectResult(errorResponse);
+                };
+
+            }
+
+
+
+            );
+            #endregion
+
+
 
             var app = builder.Build();
 
