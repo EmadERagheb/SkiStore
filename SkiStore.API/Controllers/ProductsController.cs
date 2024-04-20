@@ -32,6 +32,7 @@ namespace SkiStore.API.Controllers
             Expression<Func<Product, object>> sortAsc = default;
             Expression<Func<Product, object>> sortDesc = default;
             Expression<Func<Product, bool>> filter = p =>
+            (string.IsNullOrEmpty(productPrams.Search) || p.Name.ToLower().Contains(productPrams.Search.ToLower())) &&
             (!productPrams.BrandId.HasValue || p.BrandId == productPrams.BrandId) &&  //
             (!productPrams.ProductTypeId.HasValue || p.ProductTypeId == productPrams.ProductTypeId);
 
@@ -54,12 +55,12 @@ namespace SkiStore.API.Controllers
             products.ForEach(q => q.PictureUrl = _configuration["APIURL"] + q.PictureUrl);
             var productCount = await _productRepository.GetCountAsync(filter);
             return Ok(new Pagging<GetProductDTO>()
-                      { Count = productCount, 
-                        Data = products, 
-                        PageIndex = productPrams.PageIndex, 
-                        PageSize = productPrams.PageSize
-                      }
-                     );
+            {
+                Count = productCount,
+                Data = products,
+                PageIndex = productPrams.PageIndex,
+                PageSize = productPrams.PageSize
+            });
         }
 
         // GET: api/Products/5
