@@ -17,7 +17,13 @@ namespace SkiStore.Data.Repositories
             _context = context;
             _mapper = mapper;
         }
-        public async Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>?> filter = null, params string[] properties)
+        public async Task<List<TResult>> GetAllAsync<TResult>(
+            int pageNmuber,
+            int pageSize,
+            Expression<Func<T, bool>?> filter = null
+            , Expression<Func<T, object>?> order = null
+            , Expression<Func<T, object>?> orderDesc = null
+            , params string[] properties)
         {
             IQueryable<T> query = _context.Set<T>();
             if (filter is not null)
@@ -32,6 +38,15 @@ namespace SkiStore.Data.Repositories
                     query = query.Include(property);
                 }
             }
+            if (order is not null)
+            {
+                query = query.OrderBy(order);
+            }
+            if (orderDesc is not null)
+            {
+                query = query.OrderByDescending(orderDesc);
+            }
+            query = query.Skip(pageSize * (pageNmuber - 1)).Take(pageSize);
             return await query.ProjectTo<TResult>(_mapper.ConfigurationProvider).ToListAsync();
         }
         public async Task<TResult> GetAsync<TResult>(Expression<Func<T, bool>> filter, params string[] includedProperires)
@@ -52,7 +67,7 @@ namespace SkiStore.Data.Repositories
             T item = _mapper.Map<T>(entity);
             await _context.AddAsync(item);
             await _context.SaveChangesAsync();
-            var result= _mapper.Map<TResult>(item);
+            var result = _mapper.Map<TResult>(item);
             return result;
 
         }
@@ -82,24 +97,14 @@ namespace SkiStore.Data.Repositories
             return entity is not null;
         }
 
+        public async Task<int> GetCountAsync(Expression<Func<T, bool>?> filter)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            if (filter is not null)
+                query = query.Where(filter);
+            return await query.CountAsync();
+        }
 
-        #region Paging
-        //public async Task<QueryResult<TResult>> GetAllAsync<TResult>(QueryPerimeters queryPerimeters)
-        //{
-        //    return new QueryResult<TResult>()
-        //    {
-        //        PageNumber = queryPerimeters.PageNumber,
-        //        Items = await _context.Set<T>().Skip(queryPerimeters.PageSize * (queryPerimeters.PageNumber - 1))
-        //           .Take(queryPerimeters.PageSize)
-        //           .ProjectTo<TResult>(_mapper.ConfigurationProvider)
-        //           .ToListAsync(),
-        //        TotalCount = await _context.Set<T>().CountAsync(),
-        //        RecordNumber = queryPerimeters.PageSize
-
-
-        //    };
-        //} 
-        #endregion
 
 
 
