@@ -58,6 +58,10 @@ namespace SkiStore.API.Extensions
             }
             );
             #endregion
+            #region CORS
+            services.AddCors(setupAction => setupAction.AddPolicy("AllowAll", options => 
+            options.AllowAnyHeader().AllowAnyMethod().WithOrigins(configuration["ClientOrgin"])));
+            #endregion
             return services;
         }
     }

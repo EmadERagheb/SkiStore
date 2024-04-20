@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkiStore.Data.DTOs.Product;
+using SkiStore.Data.Helper;
+using SkiStore.Data.Specifications;
 using SkiStore.Domain.Contracts;
 using SkiStore.Domain.Models;
+using System.Linq.Expressions;
 
 namespace SkiStore.API.Controllers
 {
@@ -23,12 +26,41 @@ namespace SkiStore.API.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetProductDTO>>> GetProducts()
+        public async Task<ActionResult<Pagging<GetProductDTO>>> GetProducts([FromQuery] ProductSpecPrams productPrams)
         {
 
-            var products = (await _productRepository.GetAllAsync<GetProductDTO>());
+            Expression<Func<Product, object>> sortAsc = default;
+            Expression<Func<Product, object>> sortDesc = default;
+            Expression<Func<Product, bool>> filter = p =>
+            (string.IsNullOrEmpty(productPrams.Search) || p.Name.ToLower().Contains(productPrams.Search.ToLower())) &&
+            (!productPrams.BrandId.HasValue || p.BrandId == productPrams.BrandId) &&  //
+            (!productPrams.ProductTypeId.HasValue || p.ProductTypeId == productPrams.ProductTypeId);
+
+            switch (productPrams.Sort)
+            {
+                case "priceAsc":
+                    sortAsc = p => p.Price;
+                    break;
+                case "priceDesc":
+                    sortDesc = p => p.Price;
+                    break;
+                default:
+                    sortAsc = null;
+                    break;
+            }
+
+
+
+            var products = (await _productRepository.GetAllAsync<GetProductDTO>(productPrams.PageIndex, productPrams.PageSize, filter, sortAsc, sortDesc));
             products.ForEach(q => q.PictureUrl = _configuration["APIURL"] + q.PictureUrl);
-            return Ok(products);
+            var productCount = await _productRepository.GetCountAsync(filter);
+            return Ok(new Pagging<GetProductDTO>()
+            {
+                Count = productCount,
+                Data = products,
+                PageIndex = productPrams.PageIndex,
+                PageSize = productPrams.PageSize
+            });
         }
 
         // GET: api/Products/5
