@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SkiStore.Data.DTOs.Product;
 using SkiStore.Domain.Contracts;
 using SkiStore.Domain.Models;
+using System.Linq.Expressions;
 
 namespace SkiStore.API.Controllers
 {
@@ -23,10 +24,32 @@ namespace SkiStore.API.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetProductDTO>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<GetProductDTO>>> GetProducts(string? sort, int? brandId, int? productTypeId)
         {
 
-            var products = (await _productRepository.GetAllAsync<GetProductDTO>());
+            Expression<Func<Product, object>> sortAsc = default;
+            Expression<Func<Product, object>> sortDesc = default;
+            Expression < Func<Product, bool> > filter = p =>
+            (!brandId.HasValue || p.BrandId == brandId) &&  //
+            (!productTypeId.HasValue || p.ProductTypeId == productTypeId);
+
+            switch (sort)
+            {
+                case "priceAsc":
+                    sortAsc = p => p.Price;
+                    break;
+                case "priceDesc":
+                    sortDesc = p => p.Price;
+                    break;
+                default:
+                    sortAsc = p => p.Name;
+                    break;
+            }
+          
+
+
+
+            var products = (await _productRepository.GetAllAsync<GetProductDTO>(filter, sortAsc, sortDesc));
             products.ForEach(q => q.PictureUrl = _configuration["APIURL"] + q.PictureUrl);
             return Ok(products);
         }

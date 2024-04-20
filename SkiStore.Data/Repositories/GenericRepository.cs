@@ -17,7 +17,10 @@ namespace SkiStore.Data.Repositories
             _context = context;
             _mapper = mapper;
         }
-        public async Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>?> filter = null, params string[] properties)
+        public async Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>?> filter = null
+            , Expression<Func<T, object>?> order = null
+            , Expression<Func<T, object>?> orderDesc = null
+            , params string[] properties)
         {
             IQueryable<T> query = _context.Set<T>();
             if (filter is not null)
@@ -31,6 +34,14 @@ namespace SkiStore.Data.Repositories
                 {
                     query = query.Include(property);
                 }
+            }
+            if (order is not null)
+            {
+                query = query.OrderBy(order);
+            }
+            if (orderDesc is not null)
+            {
+                query = query.OrderByDescending(orderDesc);
             }
             return await query.ProjectTo<TResult>(_mapper.ConfigurationProvider).ToListAsync();
         }
@@ -52,7 +63,7 @@ namespace SkiStore.Data.Repositories
             T item = _mapper.Map<T>(entity);
             await _context.AddAsync(item);
             await _context.SaveChangesAsync();
-            var result= _mapper.Map<TResult>(item);
+            var result = _mapper.Map<TResult>(item);
             return result;
 
         }
