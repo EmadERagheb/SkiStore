@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SkiStore.API.Errors;
+using SkiStore.Data;
 using SkiStore.Data.Helper;
 using SkiStore.Data.Repositories;
-using SkiStore.Data;
 using SkiStore.Domain.Contracts;
-using SkiStore.API.Errors;
 
 namespace SkiStore.API.Extensions
 {
     public static class ApplicationServicesExtension
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services,IConfiguration configuration,IWebHostEnvironment environment)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
         {
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
@@ -37,6 +37,8 @@ namespace SkiStore.API.Extensions
             );
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
             #endregion
             #region AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));
@@ -59,7 +61,7 @@ namespace SkiStore.API.Extensions
             );
             #endregion
             #region CORS
-            services.AddCors(setupAction => setupAction.AddPolicy("AllowAll", options => 
+            services.AddCors(setupAction => setupAction.AddPolicy("AllowAll", options =>
             options.AllowAnyHeader().AllowAnyMethod().WithOrigins(configuration["ClientOrgin"])));
             #endregion
             return services;
