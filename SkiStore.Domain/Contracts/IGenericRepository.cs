@@ -18,7 +18,7 @@ namespace SkiStore.Domain.Contracts
 
         Task<int> UpdateAsync<TSource>( int id,TSource source);
 
-        Task DeleteAsync(T entity);
+        Task<int> DeleteAsync(int id);
 
         Task<bool> Exists(Expression<Func<T,bool>>filter);
     }

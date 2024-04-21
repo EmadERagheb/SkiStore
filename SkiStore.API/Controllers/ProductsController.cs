@@ -135,13 +135,13 @@ namespace SkiStore.API.Controllers
         public async Task<IActionResult> DeleteProduct(int id)
         {
 
+            var result = await _productRepository.DeleteAsync(id);
 
-            var product = await _productRepository.GetAsync<Product>(q => q.Id == id);
-            if (product is null)
+            if (result == 0)
             {
                 return NotFound();
             }
-            await _productRepository.DeleteAsync(product);
+
             return NoContent();
         }
 

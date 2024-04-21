@@ -16,10 +16,11 @@ namespace SkiStore.API
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddApplicationServices(builder.Configuration,builder.Environment);
+            builder.Services.AddApplicationServices(builder.Configuration, builder.Environment);
 
 
             var app = builder.Build();
+            app.UseStaticFiles();
             // this is used to handle 404 endpoints
             app.UseMiddleware<ExceptionMiddleWare>();
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
