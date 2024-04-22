@@ -19,6 +19,7 @@ export class ShopService {
     params=params.append('Sort',shopPrams.sort)
     if (shopPrams.brandId>0) params = params.append('BrandId', shopPrams.brandId);
     if (shopPrams.productTypeId>0)params=  params.append('ProductTypeId', shopPrams.productTypeId);
+    if(shopPrams.search) params=params.append("Search",shopPrams.search)
     return this.httpClient.get<Paging<Product[]>>(this.baseUrl + 'Products', {params});
   }
   getBrands() {

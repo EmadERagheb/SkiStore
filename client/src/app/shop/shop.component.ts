@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ShopService } from './shop.service';
 import { Product } from '../shared/models/Product';
 import { Brand } from '../shared/models/Brand';
 import { ProductType } from '../shared/models/ProductType';
 import { ShopPrams } from '../shared/models/shop-prams';
-import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-import { every } from 'rxjs';
 
 @Component({
   selector: 'app-shop',
@@ -13,6 +11,7 @@ import { every } from 'rxjs';
   styleUrls: ['./shop.component.scss'],
 })
 export class ShopComponent implements OnInit {
+  @ViewChild('search') searchInput!: ElementRef;
   products: Product[] = [];
   brands: Brand[] = [];
   productTypes: ProductType[] = [];
@@ -33,16 +32,14 @@ export class ShopComponent implements OnInit {
   }
 
   getProducts() {
-    this.shopService
-      .getProducts(this.shopPrams )
-      .subscribe({
-        next: (response) => {
-          this.products = response.data;
-          this.totalItems = response.count;
-        },
-        error: (error) => console.log(error.message),
-        complete: () => console.log('product loaded'),
-      });
+    this.shopService.getProducts(this.shopPrams).subscribe({
+      next: (response) => {
+        this.products = response.data;
+        this.totalItems = response.count;
+      },
+      error: (error) => console.log(error.message),
+      complete: () => console.log('product loaded'),
+    });
   }
   getBrands() {
     this.shopService.getBrands().subscribe({
@@ -61,10 +58,12 @@ export class ShopComponent implements OnInit {
   }
   onBrandSelected(brandId: number) {
     this.shopPrams.brandId = brandId;
+    this.shopPrams.pageIndex=1
     this.getProducts();
   }
   onProductTypeSelected(productTypeId: number) {
     this.shopPrams.productTypeId = productTypeId;
+    this.shopPrams.pageIndex=1
     this.getProducts();
   }
   onSortSelected(event: any) {
@@ -73,10 +72,24 @@ export class ShopComponent implements OnInit {
     this.getProducts();
   }
   onPageChange(event: any) {
-    console.log(event)
-  if(this.shopPrams.pageIndex!=event){
-    this.shopPrams.pageIndex=event;
-    this.getProducts();
+    console.log(event);
+    if (this.shopPrams.pageIndex != event) {
+      this.shopPrams.pageIndex = event;
+      this.getProducts();
+    }
   }
+  onSearch() {
+    if (this.searchInput.nativeElement.value) {
+      this.shopPrams.search = this.searchInput.nativeElement.value;
+      this.shopPrams.pageIndex=1
+      this.getProducts();
+    }
+  }
+  onReset() {
+    if (this.searchInput.nativeElement.value) {
+      this.searchInput.nativeElement.value = '';
+      this.shopPrams = new ShopPrams();
+      this.getProducts();
+    }
   }
 }

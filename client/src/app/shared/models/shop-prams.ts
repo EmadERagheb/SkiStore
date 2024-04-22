@@ -4,4 +4,5 @@ export class ShopPrams {
   sort: string = 'name';
   pageSize: number = 6;
   pageIndex = 1;
+  search:string=''
 }
