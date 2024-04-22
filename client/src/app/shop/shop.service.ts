@@ -4,6 +4,7 @@ import { Paging } from '../shared/models/Paging';
 import { Product } from '../shared/models/Product';
 import { Brand } from '../shared/models/Brand';
 import { ProductType } from '../shared/models/ProductType';
+import { ShopPrams } from '../shared/models/shop-prams';
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +12,13 @@ import { ProductType } from '../shared/models/ProductType';
 export class ShopService {
   baseUrl = 'https://localhost:7291/api/';
   constructor(private httpClient: HttpClient) {}
-  getProducts(brandId?: number, productTypeId?: number,sort?:string) {
+  getProducts(shopPrams:ShopPrams) {
     let params = new HttpParams();
-    params = params.append('PageSize', 50);
-    if (brandId) params = params.append('BrandId', brandId);
-    if (productTypeId)params=  params.append('ProductTypeId', productTypeId);
-    if(sort) params=params.append('Sort',sort)
+    params = params.append('PageSize', shopPrams.pageSize);
+    params=params.append('PageIndex',shopPrams.pageIndex)
+    params=params.append('Sort',shopPrams.sort)
+    if (shopPrams.brandId>0) params = params.append('BrandId', shopPrams.brandId);
+    if (shopPrams.productTypeId>0)params=  params.append('ProductTypeId', shopPrams.productTypeId);
     return this.httpClient.get<Paging<Product[]>>(this.baseUrl + 'Products', {params});
   }
   getBrands() {
