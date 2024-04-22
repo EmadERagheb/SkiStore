@@ -85,10 +85,13 @@ namespace SkiStore.Data.Repositories
                 return 0;
 
         }
-        public async Task DeleteAsync(T entity)
+        public async Task<int> DeleteAsync(int id)
         {
+            T entity = await _context.Set<T>().FindAsync(id);
+            if (entity is null) return 0;
             _context.Entry(entity).State = EntityState.Deleted;
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
+
         }
 
         public async Task<bool> Exists(Expression<Func<T, bool>> filter)

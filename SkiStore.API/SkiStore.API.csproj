@@ -19,4 +19,8 @@
     <ProjectReference Include="..\SkiStore.Data\SkiStore.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\images\.DS_Store" />
+  </ItemGroup>
+
 </Project>
