@@ -45,7 +45,7 @@ namespace SkiStore.API.Controllers
                     sortDesc = p => p.Price;
                     break;
                 default:
-                    sortAsc = null;
+                    sortAsc = p=>p.Name;
                     break;
             }
 
