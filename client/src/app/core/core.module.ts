@@ -6,6 +6,7 @@ import { ErrorTestComponent } from './error-test/error-test.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ServerErrorComponent } from './server-error/server-error.component';
 import { ToastrModule } from 'ngx-toastr';
+import { HeaderSectionComponent } from './header-section/header-section.component';
 
 
 
@@ -15,7 +16,8 @@ import { ToastrModule } from 'ngx-toastr';
     NavBarComponent,
     ErrorTestComponent,
     NotFoundComponent,
-    ServerErrorComponent
+    ServerErrorComponent,
+    HeaderSectionComponent
   ],
   imports: [
     CommonModule,
