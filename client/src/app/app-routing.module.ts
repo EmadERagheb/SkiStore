@@ -5,13 +5,19 @@ import { HomeComponent } from './home/home.component';
 import { ErrorTestComponent } from './core/error-test/error-test.component';
 import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
+import { BreadcrumbComponent } from 'xng-breadcrumb';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'shop', loadChildren:()=>import ("./shop/shop.module").then(m=>m.ShopModule)},
-  {path:'error-test', component:ErrorTestComponent},
-  {path:'not-found', component:NotFoundComponent},
-  {path:'server-error', component:ServerErrorComponent},
+  {
+    path: '',
+    component: HomeComponent,data:{breadcrumb:'Home'} },
+  {
+    path: 'shop',
+    loadChildren: () => import('./shop/shop.module').then((m) => m.ShopModule),
+  },
+  { path: 'error-test', component: ErrorTestComponent },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: 'server-error', component: ServerErrorComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

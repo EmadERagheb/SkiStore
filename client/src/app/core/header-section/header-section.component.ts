@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BreadcrumbService } from 'xng-breadcrumb';
 
 @Component({
   selector: 'app-header-section',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./header-section.component.scss']
 })
 export class HeaderSectionComponent {
-
+constructor(public bcService:BreadcrumbService ){}
 }
