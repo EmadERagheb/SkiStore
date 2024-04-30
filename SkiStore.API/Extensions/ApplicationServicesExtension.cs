@@ -40,6 +40,7 @@ namespace SkiStore.API.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
             #endregion
             #region Redis
             services.AddSingleton<IConnectionMultiplexer>(c =>
