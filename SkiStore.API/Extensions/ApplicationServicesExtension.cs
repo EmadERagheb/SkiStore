@@ -5,6 +5,7 @@ using SkiStore.Data;
 using SkiStore.Data.Helper;
 using SkiStore.Data.Repositories;
 using SkiStore.Domain.Contracts;
+using StackExchange.Redis;
 
 namespace SkiStore.API.Extensions
 {
@@ -39,6 +40,14 @@ namespace SkiStore.API.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
+            #endregion
+            #region Redis
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
+                return ConnectionMultiplexer.Connect(options);
+            });
             #endregion
             #region AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));
