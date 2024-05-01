@@ -13,6 +13,7 @@ const routes: Routes = [
     component: HomeComponent,data:{breadcrumb:'Home'} },
   { path: 'shop',loadChildren: () => import('./shop/shop.module').then((m) => m.ShopModule) },
   { path: 'basket',loadChildren: () => import('./basket/basket.module').then((m) => m.BasketModule) },
+  { path: 'checkout',loadChildren: () => import('./checkout/checkout.module').then((m) => m.CheckoutModule) },
   { path: 'error-test', component: ErrorTestComponent },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },
