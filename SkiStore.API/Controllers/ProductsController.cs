@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SkiStore.Data.DTOs.Product;
+using SkiStore.Domain.DTOs.Product;
 using SkiStore.Data.Helper;
 using SkiStore.Data.Specifications;
 using SkiStore.Domain.Contracts;

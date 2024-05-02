@@ -1,8 +1,8 @@
 ﻿
 using AutoMapper;
-using SkiStore.Data.DTOs.Brand;
-using SkiStore.Data.DTOs.Product;
-using SkiStore.Data.DTOs.ProductType;
+using SkiStore.Domain.DTOs.Brand;
+using SkiStore.Domain.DTOs.Product;
+using SkiStore.Domain.DTOs.ProductType;
 using SkiStore.Domain.Models;
 
 namespace SkiStore.Data.Helper

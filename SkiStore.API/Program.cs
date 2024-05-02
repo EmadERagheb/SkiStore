@@ -34,7 +34,7 @@ namespace SkiStore.API
             app.UseSwaggerUI();
             app.UseCors("AllowAll");
             app.UseHttpsRedirection();
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseAuthorization();
 
 
