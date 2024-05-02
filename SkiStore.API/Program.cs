@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SkiStore.API.Extensions;
 using SkiStore.API.MiddleWares;
 using SkiStore.Data;
+using SkiStore.Data.Identity;
 
 
 namespace SkiStore.API
@@ -33,7 +34,7 @@ namespace SkiStore.API
             app.UseSwaggerUI();
             app.UseCors("AllowAll");
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
@@ -44,10 +45,13 @@ namespace SkiStore.API
             using var scope = app.Services.CreateScope();
             var services = scope.ServiceProvider;
             var context = services.GetRequiredService<SkiStoreDbContext>();
+            var identitycontext = services.GetRequiredService<AppIdentityDbContext>();
             var logger = services.GetRequiredService<ILogger<Program>>();
             try
             {
+               
                 await context.Database.MigrateAsync();
+                await identitycontext.Database.MigrateAsync();
             }
             catch (Exception ex)
             {

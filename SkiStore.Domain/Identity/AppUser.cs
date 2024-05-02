@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SkiStore.Domain.Identity
 {
@@ -9,8 +10,7 @@ namespace SkiStore.Domain.Identity
     {
         #region Column
         public string DisplayName { get; set; }
-        [Required]
-        public int AddressId { get; set; }
+
         #endregion
         #region RS
         #region User-Address RS
@@ -18,7 +18,7 @@ namespace SkiStore.Domain.Identity
         //column AddressID
         //required
         //navigation property
-        public Address Address { get; set; }
+        //public Address AppUserAddress { get; set; }
         #endregion
         #endregion
     }
