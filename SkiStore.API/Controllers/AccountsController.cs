@@ -28,6 +28,10 @@ namespace SkiStore.API.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<AuthResponseDTO>> Register(RegisterDTO registerDTO)
         {
+            if (await _manger.IsMailExistsAsync(registerDTO.Email))
+            {
+                return BadRequest(new APIValidationErrorResponse(new List<string>() { $"Username '{registerDTO.Email}' is already taken." }));
+            }
             var errors = await _manger.RegisterAsync(registerDTO);
             if (!errors.Any())
             {
