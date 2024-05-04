@@ -43,7 +43,7 @@ namespace SkiStore.Data.Repositories
                         UserId = user.Id,
                         UserName = user.UserName,
                         Email = user.Email,
-                        Tokken = await GenerateTokenAsync(user),
+                        Token = await GenerateTokenAsync(user),
                     };
                 }
 
@@ -102,7 +102,7 @@ namespace SkiStore.Data.Repositories
                     UserId = user.Id,
                     Email = email,
                     UserName = user.DisplayName,
-                    Tokken = await GenerateTokenAsync(user)
+                    Token = await GenerateTokenAsync(user)
                 };
             }
             else
