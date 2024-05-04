@@ -129,12 +129,6 @@ namespace SkiStore.Data.Repositories
         public async Task<IEnumerable<IdentityError>> UpdateUserAddressAsync(string email, AddressDTO addressDTO)
         {
             var user = await _manager.Users.Include(q => q.Address).FirstOrDefaultAsync(e => e.Email == email);
-            //user.Address.FirstName = addressDTO.FirstName;
-            //user.Address.LastName = addressDTO.LastName;
-            //user.Address.Street = addressDTO.Street;
-            //user.Address.State = addressDTO.State;
-            //user.Address.City = addressDTO.City;
-            //user.Address.ZipCode = addressDTO.ZipCode;
             _mapper.Map(addressDTO, user.Address);
             var result = await _manager.UpdateAsync(user);
 
