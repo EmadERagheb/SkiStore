@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SkiStore.Data.DTOs.Product
+namespace SkiStore.Domain.DTOs.Product
 {
     public abstract class BaseProductDTO
     {

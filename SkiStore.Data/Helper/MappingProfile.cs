@@ -1,8 +1,10 @@
 ﻿
 using AutoMapper;
-using SkiStore.Data.DTOs.Brand;
-using SkiStore.Data.DTOs.Product;
-using SkiStore.Data.DTOs.ProductType;
+using SkiStore.Domain.DTOs.Address;
+using SkiStore.Domain.DTOs.Brand;
+using SkiStore.Domain.DTOs.Product;
+using SkiStore.Domain.DTOs.ProductType;
+using SkiStore.Domain.Identity;
 using SkiStore.Domain.Models;
 
 namespace SkiStore.Data.Helper
@@ -20,13 +22,14 @@ namespace SkiStore.Data.Helper
                  .ForMember(q => q.PictureUrl, o => o.MapFrom<PictureURLResolver>());
             CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<PostProductDTO, Product>().ReverseMap();
-
-
             #region Brand DTOs
             CreateMap<Brand, GetBrandDTO>();
             #endregion
             #region ProductType DTOs
             CreateMap<ProductType, GetProductTypeDTO>();
+            #endregion
+            #region AddressDTO
+            CreateMap<Address, AddressDTO>().ReverseMap();
             #endregion
         }
     }

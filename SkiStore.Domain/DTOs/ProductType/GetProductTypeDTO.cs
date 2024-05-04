@@ -1,4 +1,4 @@
-﻿namespace SkiStore.Data.DTOs.ProductType
+﻿namespace SkiStore.Domain.DTOs.ProductType
 {
     public class GetProductTypeDTO:BaseProductTypeDTO
     {

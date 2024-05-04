@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using SkiStore.Data.DTOs.Product;
+using SkiStore.Domain.DTOs.Product;
 using SkiStore.Domain.Models;
 
 

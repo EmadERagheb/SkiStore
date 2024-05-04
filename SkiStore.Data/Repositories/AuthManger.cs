@@ -1,129 +1,138 @@
-﻿
+﻿// Ignore Spelling: Auth
+
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using SkiStore.Domain.Contracts;
+using SkiStore.Domain.DTOs.Address;
+using SkiStore.Domain.DTOs.AppUser;
+using SkiStore.Domain.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-//namespace HotelListing.WebAPI.Repositories
-//{
 
-//    public class AuthManger : IAuthManger
-//    {
-//        private readonly UserManager<APIUser> _manager;
-//        private readonly IConfiguration _configuration;
-//        private const string _loginProvider = "HotelListingAPI";
-//        private const string _refreshToken = "RefreshToken";
+namespace SkiStore.Data.Repositories
+{
+    public class AuthManger : IAuthManger
+    {
+        private readonly UserManager<AppUser> _manager;
+        private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-
-//        public AuthManger(UserManager<APIUser> manager, IConfiguration configuration)
-//        {
-//            _manager = manager;
-//            _configuration = configuration;
-//        }
-
+        public AuthManger(UserManager<AppUser> manager, IConfiguration configuration, IMapper mapper)
+        {
+            _manager = manager;
+            _configuration = configuration;
+            _mapper = mapper;
+        }
 
 
-//        public async Task<string> GenerateToken(APIUser user)
-//        {
-//            // Token Security
-//            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTSettings:Key"]));
-//            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        public async Task<AuthResponseDTO> LoginAsync(LoginDTO loginDTO)
+        {
+            var user = await _manager.FindByEmailAsync(loginDTO.Email);
+            if (user is not null)
+            {
+                bool result = await _manager.CheckPasswordAsync(user, loginDTO.Password);
+                if (result)
+                {
+                    return new AuthResponseDTO
+                    {
+                        UserId = user.Id,
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        Tokken = await GenerateTokenAsync(user),
+                    };
+                }
 
-//            //Claims
-//            //Get Roles Claims
-//            var roles = await _manager.GetRolesAsync(user);
-//            List<Claim> roleClims = roles.Select(q => new Claim(ClaimTypes.Role, q)).ToList();
-//            //Get User Claims From DB If Exist
-//            var userClaims = await _manager.GetClaimsAsync(user);
+            }
+            return null;
+        }
 
-//            //Union Claims And Add Additional Claims
-//            var claims = new List<Claim>() {
-//                new Claim(JwtRegisteredClaimNames.Sub,user.FirstName+" "+user.LastName),
-//                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-//                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        public async Task<IEnumerable<IdentityError>> RegisterAsync(RegisterDTO registerDTO)
+        {
+            AppUser newUser = new AppUser()
+            {
+                Email = registerDTO.Email,
+                UserName = registerDTO.Email,
+                DisplayName = registerDTO.DisplayName,
+            };
+            IdentityResult resualt = await _manager.CreateAsync(newUser, registerDTO.Password);
+            return resualt.Errors;
+        }
+        public async Task<string> GenerateTokenAsync(AppUser user)
+        {
+            //Token Security
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTSettings:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
+            //Claims
+            // Get Roles Claims
+            var roles = await _manager.GetRolesAsync(user);
+            List<Claim> roleClims = roles.Select(q => new Claim(ClaimTypes.Role, q)).ToList();
+            //Get User Claim From DB IF Exists
+            var userClaims = await _manager.GetClaimsAsync(user);
+            var claims = new List<Claim>()
+            {
+                new Claim (JwtRegisteredClaimNames.GivenName,user.DisplayName),
+                new Claim(JwtRegisteredClaimNames.Email,user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+            }.Union(roleClims).Union(userClaims);
 
-//            }.Union(roleClims).Union(userClaims);
-//            //build Token
-//            var token = new JwtSecurityToken(
-//                issuer: _configuration["JWTSettings:Issuer"],
-//                audience: _configuration["JWTSettings:Audience"],
-//              expires: DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JWTSettings:DurationInMinutes"])),
-//                claims: claims,
-//                signingCredentials: credentials
-//                );
-//            // Return JwtSecurityTokenHandler
-//            return new JwtSecurityTokenHandler().WriteToken(token);
+            //build token
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JWTSettings:Issuer"],
+                audience: _configuration["JWTSettings:Audience"],
+                expires: DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JWTSettings:DurationInMinutes"])),
+                claims: claims,
+                signingCredentials: credentials
+                );
+            return new JwtSecurityTokenHandler().WriteToken(token);
 
-//        }
+        }
 
-//        public async Task<AuthResponseDTO> IsLoged(LoginDTO loginDTO)
-//        {
-//            var user = await _manager.FindByEmailAsync(loginDTO.Email);
-//            if (user is not null)
-//            {
-
-//                var isvalid = await _manager.CheckPasswordAsync(user, loginDTO.Password);
-//                if (isvalid)
-//                {
-//                    return new AuthResponseDTO()
-//                    {
-//                        UserId = user.Id,
-//                        Tokken = await GenerateToken(user),
-//                        RefreshToken=await  GenerateRefreshToken(user)
-//                    };
-//                }
-//            }
-//            return null;
-//        }
-
-//        public async Task<IEnumerable<IdentityError>> Register(APIUser user)
-//        {
-//            var result = await _manager.CreateAsync(user, user.Password);
-//            if (result.Succeeded)
-//            {
-//                await _manager.AddToRoleAsync(user, "User");
-//            }
-//            return result.Errors;
-
-//        }
-
-//        public async Task<string> GenerateRefreshToken(APIUser user)
-//        {
-//            await _manager.RemoveAuthenticationTokenAsync(user, _loginProvider, _refreshToken);
-//            var newRefreshToken = await _manager.GenerateUserTokenAsync(user, _loginProvider, _refreshToken);
-//            await _manager.SetAuthenticationTokenAsync(user, _loginProvider, _refreshToken, newRefreshToken);
-//            return newRefreshToken;
-//        }
-//        public async Task<AuthResponseDTO> VrefiyRereshToken(AuthResponseDTO request)
-//        {
-
-//            #region Case You Need To read Something From Token 
-//            //JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-//            //var token = jwtSecurityTokenHandler.ReadJwtToken(request.Tokken);
-//            //var userName = token.Claims.AsEnumerable().FirstOrDefault(q => q.Type == JwtRegisteredClaimNames.Email);
-//            //if (userName is null)
-//            //{
-//            //    return null;
-//            //} 
-//            #endregion
-//            var user = await _manager.FindByIdAsync(request.UserId);
-//            if (user is null)
-//                return null;
+        public async Task<AuthResponseDTO> GetCurrentUserAsync(string email)
+        {
+            var user = await _manager.FindByEmailAsync(email);
+            if (user is not null)
+            {
+                return new AuthResponseDTO()
+                {
+                    UserId = user.Id,
+                    Email = email,
+                    UserName = user.DisplayName,
+                    Tokken = await GenerateTokenAsync(user)
+                };
+            }
+            else
+                return null;
+        }
 
 
-//            var isValid = await _manager.VerifyUserTokenAsync(user, _loginProvider, _refreshToken, request.Tokken);
-//            if (isValid)
-//            {
-//                var token = await GenerateToken(user);
-//                return new AuthResponseDTO()
-//                {
-//                    UserId = user.Id,
-//                    Tokken = token,
-//                    RefreshToken = await GenerateRefreshToken(user)
-//                };
-//            }
-//            await _manager.UpdateSecurityStampAsync(user);
-//            return null;
-//        }
-//    }
-//}
+        public async Task<bool> IsMailExistsAsync(string email)
+        {
+            return await _manager.FindByEmailAsync(email) is null ? false : true;
+        }
+
+        public async Task<AddressDTO> GetUserAddressAsync(string email)
+        {
+            var user = await _manager.Users.Include(q => q.Address).FirstOrDefaultAsync(q => q.Email == email);
+            if (user is not null)
+            {
+                AddressDTO addressDTO = _mapper.Map<AddressDTO>(user.Address);
+                return addressDTO;
+            }
+            return null;
+        }
+
+        public async Task<IEnumerable<IdentityError>> UpdateUserAddressAsync(string email, AddressDTO addressDTO)
+        {
+            var user = await _manager.Users.Include(q => q.Address).FirstOrDefaultAsync(e => e.Email == email);
+            _mapper.Map(addressDTO, user.Address);
+            var result = await _manager.UpdateAsync(user);
+
+            return result.Errors;
+        }
+    }
+}

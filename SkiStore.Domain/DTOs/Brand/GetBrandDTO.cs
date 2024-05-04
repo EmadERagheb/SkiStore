@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SkiStore.Data.DTOs.Brand
+namespace SkiStore.Domain.DTOs.Brand
 {
-    public abstract class BaseBrandDTO
+    public class GetBrandDTO:BaseBrandDTO
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
     }
 }

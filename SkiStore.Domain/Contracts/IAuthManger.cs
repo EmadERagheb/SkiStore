@@ -1,23 +1,25 @@
-﻿
+﻿// Ignore Spelling: Auth
 
-//namespace HotelListing.WebAPI.Contracts
-//{
-//    //public interface IAuthManger
-//    //{
-//    //    Task<IEnumerable<IdentityError>> Register(APIUser user);
+using Microsoft.AspNetCore.Identity;
+using SkiStore.Domain.DTOs.Address;
+using SkiStore.Domain.DTOs.AppUser;
+using SkiStore.Domain.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//    //    Task<AuthResponseDTO> IsLoged(LoginDTO loginDTO);
-
-//    //    Task<string> GenerateToken(APIUser user);
-
-//    //    //Very Important
-//    //    /// <summary>
-//    //    /// To Work With Refresh token you need 
-//    //    /// add token provider which we set at configuration  to identity configuration at program.cs
-//    //    /// and Add.DefaultToken Profiver
-     
-//    //    Task<string> GenerateRefreshToken(APIUser user);
-//    //    Task<AuthResponseDTO> VrefiyRereshToken(AuthResponseDTO request);
-
-//    //}
-//}
+namespace SkiStore.Domain.Contracts
+{
+    public interface IAuthManger
+    {
+        Task<AuthResponseDTO> LoginAsync(LoginDTO loginDTO);
+        Task<IEnumerable<IdentityError>> RegisterAsync(RegisterDTO registerDTO);
+        Task<string> GenerateTokenAsync(AppUser user);
+        Task<AuthResponseDTO> GetCurrentUserAsync(string email);
+        Task<bool> IsMailExistsAsync(string email);
+        Task<AddressDTO> GetUserAddressAsync(string email);
+        Task<IEnumerable<IdentityError>> UpdateUserAddressAsync(string email, AddressDTO addressDTO);
+    }
+}

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkiStore.Data;
-using SkiStore.Data.DTOs.Brand;
+using SkiStore.Domain.DTOs.Brand;
 using SkiStore.Domain.Contracts;
 using SkiStore.Domain.Models;
 
