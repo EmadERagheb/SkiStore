@@ -9,6 +9,7 @@ namespace SkiStore.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
+            //builder.HasIndex(e => e.AppUserId).IsUnique(false);
             builder.HasData(AddressList.Addresses);
         }
     }

@@ -18,12 +18,7 @@ namespace SkiStore.Domain.ModelLists
                 EmailConfirmed=true,
                 PasswordHash=(new PasswordHasher<AppUser>()).HashPassword(null,"Pa$$word123"),
             },
-            new AppUser()
-            {
-                DisplayName="bob",
-                Email="bob@",
-                PasswordHash= (new PasswordHasher<AppUser>()).HashPassword(null,"Pa$$word123"),
-            }
+           
         };
     }
 }

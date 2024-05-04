@@ -1,14 +1,18 @@
 ﻿// Ignore Spelling: Auth
 
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SkiStore.Domain.Contracts;
+using SkiStore.Domain.DTOs.Address;
 using SkiStore.Domain.DTOs.AppUser;
 using SkiStore.Domain.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
 
 namespace SkiStore.Data.Repositories
 {
@@ -16,11 +20,13 @@ namespace SkiStore.Data.Repositories
     {
         private readonly UserManager<AppUser> _manager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public AuthManger(UserManager<AppUser> manager, IConfiguration configuration)
+        public AuthManger(UserManager<AppUser> manager, IConfiguration configuration, IMapper mapper)
         {
             _manager = manager;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
 
@@ -84,6 +90,55 @@ namespace SkiStore.Data.Repositories
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);
 
+        }
+
+        public async Task<AuthResponseDTO> GetCurrentUserAsync(string email)
+        {
+            var user = await _manager.FindByEmailAsync(email);
+            if (user is not null)
+            {
+                return new AuthResponseDTO()
+                {
+                    UserId = user.Id,
+                    Email = email,
+                    UserName = user.DisplayName,
+                    Tokken = await GenerateTokenAsync(user)
+                };
+            }
+            else
+                return null;
+        }
+
+
+        public async Task<bool> IsMailExistsAsync(string email)
+        {
+            return await _manager.FindByEmailAsync(email) is null ? false : true;
+        }
+
+        public async Task<AddressDTO> GetUserAddressAsync(string email)
+        {
+            var user = await _manager.Users.Include(q => q.Address).FirstOrDefaultAsync(q => q.Email == email);
+            if (user is not null)
+            {
+                AddressDTO addressDTO = _mapper.Map<AddressDTO>(user.Address);
+                return addressDTO;
+            }
+            return null;
+        }
+
+        public async Task<IEnumerable<IdentityError>> UpdateUserAddressAsync(string email, AddressDTO addressDTO)
+        {
+            var user = await _manager.Users.Include(q => q.Address).FirstOrDefaultAsync(e => e.Email == email);
+            //user.Address.FirstName = addressDTO.FirstName;
+            //user.Address.LastName = addressDTO.LastName;
+            //user.Address.Street = addressDTO.Street;
+            //user.Address.State = addressDTO.State;
+            //user.Address.City = addressDTO.City;
+            //user.Address.ZipCode = addressDTO.ZipCode;
+            _mapper.Map(addressDTO, user.Address);
+            var result = await _manager.UpdateAsync(user);
+
+            return result.Errors;
         }
     }
 }

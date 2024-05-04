@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SkiStore.API.Errors;
 using SkiStore.Data;
 
@@ -40,7 +41,12 @@ namespace SkiStore.API.Controllers
         {
             return Ok();
         }
-
+        [Authorize]
+        [HttpGet("secretText")]
+        public ActionResult<string> GetSecretText()
+        {
+            return "this is secret text ";
+        }
 
     }
 }

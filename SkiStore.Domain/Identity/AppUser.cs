@@ -18,7 +18,7 @@ namespace SkiStore.Domain.Identity
         //column AddressID
         //required
         //navigation property
-        //public Address AppUserAddress { get; set; }
+        public Address Address { get; set; }
         #endregion
         #endregion
     }

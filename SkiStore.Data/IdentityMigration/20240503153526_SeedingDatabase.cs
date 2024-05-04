@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace SkiStore.Data.IdentityMigrations
+namespace SkiStore.Data.IdentityMigration
 {
     /// <inheritdoc />
-    public partial class SeedingUsersAndAddressTable : Migration
+    public partial class SeedingDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -13,7 +13,7 @@ namespace SkiStore.Data.IdentityMigrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DisplayName", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "c0b71f33-57b5-4b18-8878-d24bda5e8e5a", 0, "fcac67c8-cdb8-4188-b9c5-ac37f7e5a5af", "Emad", "Emaderagheb@gmail.com", false, false, null, null, null, "AQAAAAIAAYagAAAAELnBy8EC17o3W2ipPM51SDQO5AdDXdu7+/wPppo3iE+gRooceyZSaJ0BEtqjG7LCtA==", null, false, "c6faae91-bd98-4cf1-885c-2671c5767a24", false, "Emaderagheb@gmail.com" });
+                values: new object[] { "c0b71f33-57b5-4b18-8878-d24bda5e8e5a", 0, "2fe88a6e-8d02-4a4b-aae6-924dfba2246f", "Emad", "emaderagheb@gmail.com", true, false, null, "EMADERAGHEB@GMAIL.COM", "EMADERAGHEB@GMAIL.COM", "AQAAAAIAAYagAAAAEHW0DBmFsQNAbURSh/cJpenjDsqHHkkSxqvvNCQALFNN8fO65OixlMqTeRnD2isSUQ==", null, false, "86068912-5229-405c-ad42-e5132bd75fec", false, "emaderagheb@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "Address",

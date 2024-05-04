@@ -193,7 +193,8 @@ namespace SkiStore.Data.IdentityMigrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
 
                     b.ToTable("Address");
 
@@ -284,32 +285,18 @@ namespace SkiStore.Data.IdentityMigrations
                         {
                             Id = "c0b71f33-57b5-4b18-8878-d24bda5e8e5a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5760dd8c-d167-4978-829a-a75c53cae844",
+                            ConcurrencyStamp = "c153887d-08b3-4326-bf5f-3fe65b7a110a",
                             DisplayName = "Emad",
                             Email = "emaderagheb@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "EMADERAGHEB@GMAIL.COM",
                             NormalizedUserName = "EMADERAGHEB@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAENOcPdZ/C65ee+j34re1ExH3kYMR2C1W8vZyqtvTyj7CAbvnKtMhJqPHQACdmdCwkA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENkNzoU0mKWkvmMbKoYcJiEmMbsDiBg4AORX0em+a6RvWk/mfp/AEmKGcCG7Zb7ucA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "94c4c06a-991c-4a4a-b7f1-089bb447009a",
+                            SecurityStamp = "fbd54898-94df-4bd1-8571-9f9b45b10903",
                             TwoFactorEnabled = false,
                             UserName = "emaderagheb@gmail.com"
-                        },
-                        new
-                        {
-                            Id = "15cb543d-19b9-494d-9e3d-3b157df0a955",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "77242f1f-5709-49f5-9102-711c918edac2",
-                            DisplayName = "bob",
-                            Email = "bob@",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAENlkbM1wbf9VCUFg/EXMh8lcrTDDap8bhw1GJhipCIKYbveUTXcmkb7e5BbH28kKkA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "9d8636ec-2afc-413f-b783-36c68c34ed16",
-                            TwoFactorEnabled = false
                         });
                 });
 
@@ -367,12 +354,18 @@ namespace SkiStore.Data.IdentityMigrations
             modelBuilder.Entity("SkiStore.Domain.Identity.Address", b =>
                 {
                     b.HasOne("SkiStore.Domain.Identity.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
+                        .WithOne("Address")
+                        .HasForeignKey("SkiStore.Domain.Identity.Address", "AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("SkiStore.Domain.Identity.AppUser", b =>
+                {
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

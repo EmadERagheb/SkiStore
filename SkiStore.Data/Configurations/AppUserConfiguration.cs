@@ -14,6 +14,8 @@ namespace SkiStore.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
+
+
             builder.HasData(UsersList.Users);
         }
     }

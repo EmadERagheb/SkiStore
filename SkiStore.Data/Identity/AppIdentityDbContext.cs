@@ -24,6 +24,7 @@ namespace SkiStore.Data.Identity
         {
             builder.ApplyConfiguration(new AppUserConfiguration());
             builder.ApplyConfiguration(new AddressContiguration());
+
             base.OnModelCreating(builder);
         }
     }

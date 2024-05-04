@@ -9,11 +9,11 @@ using SkiStore.Data.Identity;
 
 #nullable disable
 
-namespace SkiStore.Data.IdentityMigrations
+namespace SkiStore.Data.IdentityMigration
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20240501220721_test")]
-    partial class test
+    [Migration("20240503153526_SeedingDatabase")]
+    partial class SeedingDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,6 +199,19 @@ namespace SkiStore.Data.IdentityMigrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Address");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AppUserId = "c0b71f33-57b5-4b18-8878-d24bda5e8e5a",
+                            City = "Cairo",
+                            FirstName = "Emad",
+                            LastName = "Ragheb",
+                            State = "6th-October",
+                            Street = "Harm City",
+                            ZipCode = "123456"
+                        });
                 });
 
             modelBuilder.Entity("SkiStore.Domain.Identity.AppUser", b =>
@@ -268,6 +281,25 @@ namespace SkiStore.Data.IdentityMigrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c0b71f33-57b5-4b18-8878-d24bda5e8e5a",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "2fe88a6e-8d02-4a4b-aae6-924dfba2246f",
+                            DisplayName = "Emad",
+                            Email = "emaderagheb@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "EMADERAGHEB@GMAIL.COM",
+                            NormalizedUserName = "EMADERAGHEB@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHW0DBmFsQNAbURSh/cJpenjDsqHHkkSxqvvNCQALFNN8fO65OixlMqTeRnD2isSUQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "86068912-5229-405c-ad42-e5132bd75fec",
+                            TwoFactorEnabled = false,
+                            UserName = "emaderagheb@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -324,12 +356,18 @@ namespace SkiStore.Data.IdentityMigrations
             modelBuilder.Entity("SkiStore.Domain.Identity.Address", b =>
                 {
                     b.HasOne("SkiStore.Domain.Identity.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
+                        .WithOne("Address")
+                        .HasForeignKey("SkiStore.Domain.Identity.Address", "AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("SkiStore.Domain.Identity.AppUser", b =>
+                {
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
