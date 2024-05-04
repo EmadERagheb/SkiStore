@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SkiStore.API.Errors;
 using SkiStore.Domain.Contracts;
+using SkiStore.Domain.DTOs.Basket;
 using SkiStore.Domain.Models;
 
 namespace SkiStore.API.Controllers
@@ -9,10 +12,12 @@ namespace SkiStore.API.Controllers
     public class BasketsController : ControllerBase
     {
         private readonly IBasketRepository _basketRepository;
+        private readonly IMapper _mapper;
 
-        public BasketsController(IBasketRepository basketRepository)
+        public BasketsController(IBasketRepository basketRepository, IMapper mapper)
         {
             _basketRepository = basketRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,15 +27,21 @@ namespace SkiStore.API.Controllers
             return basket is null ? Ok(new CustomerBasket(id)) : Ok(basket);
         }
         [HttpPost]
-        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasket basket)
+        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDTO customerBasketDTO)
         {
-            var updateBasket = await _basketRepository.UpdateBasketAsync(basket);
+            var customerBasket = await _basketRepository.GetBasketAsync(customerBasketDTO.Id);
+            if (customerBasket is null)
+            {
+                return NotFound(new APIResponse(404));
+            }
+            _mapper.Map(customerBasketDTO, customerBasket);
+            var updateBasket = await _basketRepository.UpdateBasketAsync(customerBasket);
             return updateBasket is null ? NotFound() : Ok(updateBasket);
         }
         [HttpDelete]
         public async Task<bool> DeleteBasket(string id)
-         { 
-        return  await  _basketRepository.DeleteBasketAsync(id);
+        {
+            return await _basketRepository.DeleteBasketAsync(id);
         }
     }
 }

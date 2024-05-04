@@ -13,8 +13,7 @@ namespace SkiStore.API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
         {
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+          
 
             #region IOC
             services.AddDbContext<SkiStoreDbContext>(options =>

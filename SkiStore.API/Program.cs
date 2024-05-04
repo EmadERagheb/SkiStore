@@ -16,7 +16,7 @@ namespace SkiStore.API
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddSwaggerDocumentation();
             builder.Services.AddApplicationServices(builder.Configuration, builder.Environment);
             builder.Services.AddIdentityServices(builder.Configuration,builder.Environment);
 
@@ -30,8 +30,7 @@ namespace SkiStore.API
             if (app.Environment.IsDevelopment())
             {
             }
-            app.UseSwagger();
-            app.UseSwaggerUI();
+          app.USeSwaggerDecumentation();
             app.UseCors("AllowAll");
             app.UseHttpsRedirection();
             //app.UseAuthentication();
