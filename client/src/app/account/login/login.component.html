@@ -1,1 +1,22 @@
-<p>login works!</p>
+<div class="d-flex justify-content-center mt-5">
+
+    <div class="col-3">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="text-center mb-4">
+                <h1 class="mb-4">Login</h1>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" formControlName="email" class="form-control" id="email" name="email" placeholder="Email">
+                <label for="email">Email Address</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" formControlName="password"  class="form-control" id="password" name="password" placeholder="password">
+                <label for="email">Password</label>
+            </div>
+            <div class="d-grid">
+                <button class="btn btn-lg btn-primary mt-3" type="submit">Sign in</button>
+            </div>
+
+        </form>
+    </div>
+</div>
