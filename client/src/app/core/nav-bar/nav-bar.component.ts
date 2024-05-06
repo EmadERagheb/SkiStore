@@ -9,6 +9,7 @@ import { BasketItem } from 'src/app/shared/models/basket';
   styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent {
+
   constructor(public basketService: BasketService ,public accountService:AccountService) {}
   public getItemCount(items: BasketItem[]):number {
    return items.reduce((sum, item) => sum + item.quantity, 0);

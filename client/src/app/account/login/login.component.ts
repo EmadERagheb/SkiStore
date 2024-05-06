@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AccountService } from '../account.service';
 import { Login } from 'src/app/shared/models/login';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import { Login } from 'src/app/shared/models/login';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  constructor(private fb: FormBuilder,private accountService :AccountService) {
+  constructor(private fb: FormBuilder,private accountService :AccountService,private router:Router) {
     this.loginForm= fb.group(
       {
         email:[],
@@ -27,11 +28,9 @@ export class LoginComponent {
 
   onSubmit(){
     const login = this.loginForm.value as Login
-    console.log(this.email.value)
-    console.log(this.password.value)
    this.accountService.login(login).subscribe({
-    next:(data)=>{
-      console.log(data)
+    next:()=>{
+     this.router.navigateByUrl('/shop')
     }
    })
    
