@@ -1,1 +1,19 @@
-<p>register works!</p>
+<div class="d-flex justify-content-center mt-5">
+
+    <div class="col-3">
+        <form [formGroup]="registerFrom" (ngSubmit)="onSubmit()">
+            <div class="text-center mb-4">
+                <h1 class="mb-4">Register</h1>
+            </div>
+            <div class="form-floating mb-3">
+            <app-text-input  label="display name" [formControl]="registerFrom.controls['displayName']" ></app-text-input>
+            <app-text-input  label="Email Address" [formControl]="registerFrom.controls['email']" ></app-text-input>
+            <app-text-input  label="Password"  [formControl]="registerFrom.controls['password']" ></app-text-input>
+            </div>
+            <div class="d-grid">
+                <button [disabled]="registerFrom.invalid" class="btn btn-lg btn-primary mt-3" type="submit">Sign up</button>
+            </div>
+
+        </form>
+    </div>
+</div>

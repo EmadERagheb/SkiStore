@@ -24,9 +24,7 @@ export class AppComponent implements OnInit {
   loadCurrentUser() {
    
     const token = localStorage.getItem('token');
-    if (token) {
-      console.log(token);
       this.accountService.getCurrentUser(token).subscribe();
-    }
+    
   }
 }

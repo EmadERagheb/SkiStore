@@ -1,32 +1,52 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../shared/models/user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Login } from '../shared/models/login';
+import { Register } from '../shared/models/register';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
   baseURL: string = environment.apiUrl + 'Accounts/';
-  private userSource = new BehaviorSubject<null | User>(null);
+  private userSource = new ReplaySubject<null | User>(1);
   public userSource$ = this.userSource.asObservable();
 
   constructor(private httpClient: HttpClient, private router: Router) {}
-  getCurrentUser(token: string) {
-    let headers = new HttpHeaders();
-    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
-    headers = headers.set('Authorization', `Bearer ${token}`);
-    console.log(headers)
-    return this.httpClient.get<User>(this.baseURL + 'getCurrentUser', { headers })
-  .pipe(map((user) => {
-    localStorage.setItem('token', user.token);
-       this.userSource.next(user);
-       return user
-        })
-      );
+  getCurrentUser(token: string | null) {
+    if (token == null) {
+      this.userSource.next(null);
+      return of(null);
+    } else {
+      let headers = new HttpHeaders();
+      headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+      headers = headers.set('Authorization', `Bearer ${token}`);
+      console.log(headers);
+      return this.httpClient
+        .get<User>(this.baseURL + 'getCurrentUser', { headers })
+        .pipe(
+          map((user) => {
+            if (user) {
+              localStorage.setItem('token', user.token);
+              this.userSource.next(user);
+              return user;
+            } else {
+              return null;
+            }
+          })
+        );
+    }
+  }
+  register(register: Register) {
+    return this.httpClient.post<User>(this.baseURL + 'Register', register).pipe(
+      map((user) => {
+        this.userSource.next(user);
+        localStorage.setItem('token', user.token);
+      })
+    );
   }
   login(login: Login) {
     return this.httpClient.post<User>(`${this.baseURL}Login`, login).pipe(
@@ -43,6 +63,8 @@ export class AccountService {
   }
   // isEmailExists?email=dd
   checkEmailExists(email: string) {
-    this.httpClient.get<boolean>(this.baseURL + 'isEmailExists?email' + email);
+    return this.httpClient.get<boolean>(
+      this.baseURL + 'isEmailExists?email=' + email
+    );
   }
 }
