@@ -10,19 +10,18 @@ import { LoadingService } from '../services/loading.service';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
-  constructor(private loadingService:LoadingService) {}
+  constructor(private loadingService: LoadingService) {}
 
   intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler): Observable<HttpEvent<unknown>> {
-    this.loadingService.busy();
-    return next.handle(request).pipe(delay(1000),
-    finalize(()=>this.loadingService.idle())
-  );
-    
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    if (!request.url.includes('isEmailExists')) {
+      this.loadingService.busy();
+    }
+    return next.handle(request).pipe(
+      delay(1000),
+      finalize(() => this.loadingService.idle())
+    );
   }
-
-
-  
-  
 }

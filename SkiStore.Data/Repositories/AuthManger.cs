@@ -41,9 +41,9 @@ namespace SkiStore.Data.Repositories
                     return new AuthResponseDTO
                     {
                         UserId = user.Id,
-                        UserName = user.UserName,
+                        DisplayName = user.DisplayName,
                         Email = user.Email,
-                        Tokken = await GenerateTokenAsync(user),
+                        Token = await GenerateTokenAsync(user),
                     };
                 }
 
@@ -101,8 +101,8 @@ namespace SkiStore.Data.Repositories
                 {
                     UserId = user.Id,
                     Email = email,
-                    UserName = user.DisplayName,
-                    Tokken = await GenerateTokenAsync(user)
+                    DisplayName = user.DisplayName,
+                    Token = await GenerateTokenAsync(user)
                 };
             }
             else
