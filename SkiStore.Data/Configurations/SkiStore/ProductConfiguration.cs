@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SkiStore.Data.Configurations
+namespace SkiStore.Data.Configurations.SkiStore
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {

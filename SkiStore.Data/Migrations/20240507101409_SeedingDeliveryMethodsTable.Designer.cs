@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkiStore.Data;
 
@@ -11,9 +12,11 @@ using SkiStore.Data;
 namespace SkiStore.Data.Migrations
 {
     [DbContext(typeof(SkiStoreDbContext))]
-    partial class SkiStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507101409_SeedingDeliveryMethodsTable")]
+    partial class SeedingDeliveryMethodsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
