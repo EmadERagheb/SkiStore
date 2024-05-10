@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SkiStore.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedingDeliveryMethodsTable : Migration
+    public partial class seedingDeleveryMethodsTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

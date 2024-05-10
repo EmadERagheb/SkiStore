@@ -3,10 +3,12 @@ using AutoMapper;
 using SkiStore.Domain.DTOs.Address;
 using SkiStore.Domain.DTOs.Basket;
 using SkiStore.Domain.DTOs.Brand;
+using SkiStore.Domain.DTOs.Order;
 using SkiStore.Domain.DTOs.Product;
 using SkiStore.Domain.DTOs.ProductType;
 using SkiStore.Domain.Identity;
 using SkiStore.Domain.Models;
+using SkiStore.Domain.Models.OrderAggregate;
 
 namespace SkiStore.Data.Helper
 {
@@ -34,6 +36,12 @@ namespace SkiStore.Data.Helper
             #region Basket DTOs
             CreateMap<BasketItem, BasketItemDTO>().ReverseMap();
             CreateMap<CustomerBasket, CustomerBasketDTO>().ReverseMap();
+            #endregion
+            #region OrderDTO
+            CreateMap<Order,OrderDTO>().ReverseMap();
+            CreateMap<ShippingAddress, ShippingAddressDTO>().ReverseMap();
+            CreateMap<DeliveryMethod, DeliveryMethod>();    
+            CreateMap<DeliveryMethod,DeliveryMethodDTO>();
             #endregion
         }
     }

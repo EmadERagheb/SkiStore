@@ -24,7 +24,7 @@ namespace SkiStore.API.Controllers
         public async Task<ActionResult<CustomerBasket>> GetBasket(string id)
         {
             var basket = await _basketRepository.GetBasketAsync(id);
-            return basket is null ? Ok(new CustomerBasket(id)) : Ok(basket);
+            return Ok(basket);
         }
         [HttpPost]
         public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDTO customerBasketDTO)

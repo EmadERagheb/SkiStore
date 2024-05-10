@@ -16,7 +16,7 @@ namespace SkiStore.Data.Repositories
         {
 
             var data = await _db.StringGetAsync(id);
-            return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<CustomerBasket>(data);
+            return data.IsNullOrEmpty ? new CustomerBasket() { Id=id,Items=new List<BasketItem>()} : JsonSerializer.Deserialize<CustomerBasket>(data);
         }
         public async Task<bool> DeleteBasketAsync(string id)
         {

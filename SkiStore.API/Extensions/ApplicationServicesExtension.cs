@@ -13,7 +13,7 @@ namespace SkiStore.API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
         {
-          
+
 
             #region IOC
             services.AddDbContext<SkiStoreDbContext>(options =>
@@ -40,6 +40,8 @@ namespace SkiStore.API.Extensions
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
             #region Redis
             services.AddSingleton<IConnectionMultiplexer>(c =>

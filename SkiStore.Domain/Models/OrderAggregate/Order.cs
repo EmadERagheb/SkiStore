@@ -4,14 +4,14 @@
     {
         public Order()
         {
-            
+
         }
 
-        public Order(List<OrderItem> orderItems, string buyerEmail, Address shipToAddress, DeliveryMethod deliveryMethod,  decimal subtotal)
+        public Order(List<OrderItem> orderItems, string buyerEmail, ShippingAddress shipToAddress, int deliveryMethodId, decimal subtotal)
         {
             BuyerEmail = buyerEmail;
             ShipToAddress = shipToAddress;
-            DeliveryMethod = deliveryMethod;
+            DeliveryMethodId = deliveryMethodId;
             OrderItems = orderItems;
             Subtotal = subtotal;
         }
@@ -22,8 +22,9 @@
 
 
 
-        public Address ShipToAddress { get; set; }
+        public ShippingAddress ShipToAddress { get; set; }
 
+        public int DeliveryMethodId { get; set; }
         public DeliveryMethod DeliveryMethod { get; set; }
 
         public List<OrderItem> OrderItems { get; set; }
@@ -32,7 +33,7 @@
 
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
-        public string PaymentIntentId { get; set; }
+        public string? PaymentIntentId { get; set; }
 
         public decimal GetTotal()
         {

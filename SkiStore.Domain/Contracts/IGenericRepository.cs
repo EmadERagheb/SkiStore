@@ -14,11 +14,11 @@ namespace SkiStore.Domain.Contracts
 
         Task<int> GetCountAsync(Expression<Func<T, bool>?> filter);
 
-        Task<TResult> AddAsync<TSource,TResult>(TSource entity);
+        void Add(T entity);
 
-        Task<int> UpdateAsync<TSource>( int id,TSource source);
+        void Update( T entity);
 
-        Task<int> DeleteAsync(int id);
+        void Delete(T entity);
 
         Task<bool> Exists(Expression<Func<T,bool>>filter);
     }

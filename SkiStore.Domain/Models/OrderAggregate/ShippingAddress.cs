@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SkiStore.Domain.Models.OrderAggregate
 {
-    public class Address
+    public class ShippingAddress
     {
-        public Address()
+        public ShippingAddress()
         {
             
         }
-        public Address(string firstName, string lastName, string street, string city, string state, string zipCode)
+        public ShippingAddress(string firstName, string lastName, string street, string city, string state, string zipCode)
         {
             FirstName = firstName;
             LastName = lastName;

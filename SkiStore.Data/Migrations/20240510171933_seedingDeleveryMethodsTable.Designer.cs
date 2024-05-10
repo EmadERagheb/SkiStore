@@ -12,8 +12,8 @@ using SkiStore.Data;
 namespace SkiStore.Data.Migrations
 {
     [DbContext(typeof(SkiStoreDbContext))]
-    [Migration("20240507095056_OrderTable")]
-    partial class OrderTable
+    [Migration("20240510171933_seedingDeleveryMethodsTable")]
+    partial class seedingDeleveryMethodsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -141,6 +141,48 @@ namespace SkiStore.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeliveryMethod");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeliveryTime = "1-2 Days",
+                            Description = "Fastest delivery time",
+                            Price = 10m,
+                            ShortName = "UPS1",
+                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeliveryTime = "2-5 Days",
+                            Description = "Get it within 5 days",
+                            Price = 5m,
+                            ShortName = "UPS2",
+                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeliveryTime = "5-10 Days",
+                            Description = "Slower but cheap",
+                            Price = 2m,
+                            ShortName = "UPS3",
+                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeliveryTime = "1-2 Weeks",
+                            Description = "Free! You get what you pay for",
+                            Price = 0m,
+                            ShortName = "FREE",
+                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("SkiStore.Domain.Models.OrderAggregate.Order", b =>
@@ -260,8 +302,9 @@ namespace SkiStore.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasPrecision(16, 2)
+                        .HasColumnType("decimal(16,2)");
 
                     b.Property<int>("ProductTypeId")
                         .HasColumnType("int");
@@ -292,7 +335,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Angular Speedster Board 2000",
                             PictureUrl = "images/products/sb-ang1.png",
-                            Price = 200.0,
+                            Price = 200m,
                             ProductTypeId = 1,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -304,7 +347,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.",
                             Name = "Green Angular Board 3000",
                             PictureUrl = "images/products/sb-ang2.png",
-                            Price = 150.0,
+                            Price = 150m,
                             ProductTypeId = 1,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -316,7 +359,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                             Name = "Core Board Speed Rush 3",
                             PictureUrl = "images/products/sb-core1.png",
-                            Price = 180.0,
+                            Price = 180m,
                             ProductTypeId = 1,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -328,7 +371,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
                             Name = "Net Core Super Board",
                             PictureUrl = "images/products/sb-core2.png",
-                            Price = 300.0,
+                            Price = 300m,
                             ProductTypeId = 1,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -340,7 +383,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "React Board Super Whizzy Fast",
                             PictureUrl = "images/products/sb-react1.png",
-                            Price = 250.0,
+                            Price = 250m,
                             ProductTypeId = 1,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -352,7 +395,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.",
                             Name = "Typescript Entry Board",
                             PictureUrl = "images/products/sb-ts1.png",
-                            Price = 120.0,
+                            Price = 120m,
                             ProductTypeId = 1,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -364,7 +407,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Core Blue Hat",
                             PictureUrl = "images/products/hat-core1.png",
-                            Price = 10.0,
+                            Price = 10m,
                             ProductTypeId = 2,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -376,7 +419,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                             Name = "Green React Woolen Hat",
                             PictureUrl = "images/products/hat-react1.png",
-                            Price = 8.0,
+                            Price = 8m,
                             ProductTypeId = 2,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -388,7 +431,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Purple React Woolen Hat",
                             PictureUrl = "images/products/hat-react2.png",
-                            Price = 15.0,
+                            Price = 15m,
                             ProductTypeId = 2,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -400,7 +443,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.",
                             Name = "Blue Code Gloves",
                             PictureUrl = "images/products/glove-code1.png",
-                            Price = 18.0,
+                            Price = 18m,
                             ProductTypeId = 4,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -412,7 +455,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
                             Name = "Green Code Gloves",
                             PictureUrl = "images/products/glove-code2.png",
-                            Price = 15.0,
+                            Price = 15m,
                             ProductTypeId = 4,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -424,7 +467,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa.",
                             Name = "Purple React Gloves",
                             PictureUrl = "images/products/glove-react1.png",
-                            Price = 16.0,
+                            Price = 16m,
                             ProductTypeId = 4,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -436,7 +479,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
                             Name = "Green React Gloves",
                             PictureUrl = "images/products/glove-react2.png",
-                            Price = 14.0,
+                            Price = 14m,
                             ProductTypeId = 4,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -448,7 +491,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                             Name = "Redis Red Boots",
                             PictureUrl = "images/products/boot-redis1.png",
-                            Price = 250.0,
+                            Price = 250m,
                             ProductTypeId = 3,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -460,7 +503,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Core Red Boots",
                             PictureUrl = "images/products/boot-core2.png",
-                            Price = 189.99000000000001,
+                            Price = 189.99m,
                             ProductTypeId = 3,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -472,7 +515,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
                             Name = "Core Purple Boots",
                             PictureUrl = "images/products/boot-core1.png",
-                            Price = 199.99000000000001,
+                            Price = 199.99m,
                             ProductTypeId = 3,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -484,7 +527,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.",
                             Name = "Angular Purple Boots",
                             PictureUrl = "images/products/boot-ang2.png",
-                            Price = 150.0,
+                            Price = 150m,
                             ProductTypeId = 3,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -496,7 +539,7 @@ namespace SkiStore.Data.Migrations
                             Description = "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                             Name = "Angular Blue Boots",
                             PictureUrl = "images/products/boot-ang1.png",
-                            Price = 180.0,
+                            Price = 180m,
                             ProductTypeId = 3,
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -570,7 +613,7 @@ namespace SkiStore.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("SkiStore.Domain.Models.OrderAggregate.Address", "ShipToAddress", b1 =>
+                    b.OwnsOne("SkiStore.Domain.Models.OrderAggregate.ShippingAddress", "ShipToAddress", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
