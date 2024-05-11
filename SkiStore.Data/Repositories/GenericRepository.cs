@@ -62,35 +62,23 @@ namespace SkiStore.Data.Repositories
             }
             return await query.ProjectTo<TResult>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
         }
-        public async Task<TResult> AddAsync<TSource, TResult>(TSource entity)
+        public void Add(T entity)
         {
-            T item = _mapper.Map<T>(entity);
-            await _context.AddAsync(item);
-            await _context.SaveChangesAsync();
-            var result = _mapper.Map<TResult>(item);
-            return result;
 
+             _context.Set<T>().Add(entity);
         }
 
-        public async Task<int> UpdateAsync<TSource>(int id, TSource source)
+        public void Update( T entity)
         {
-            T entity = await _context.Set<T>().FindAsync(id);
-            if (entity is not null)
-            {
-                _mapper.Map(source, entity);
-                _context.Update(entity);
-                return await _context.SaveChangesAsync();
-            }
-            else
-                return 0;
+            _context.Set<T>().Update(entity);
+            //_context.Entry(entity).State= EntityState.Modified;
 
         }
-        public async Task<int> DeleteAsync(int id)
+        public void  Delete(T entity)
         {
-            T entity = await _context.Set<T>().FindAsync(id);
-            if (entity is null) return 0;
-            _context.Entry(entity).State = EntityState.Deleted;
-            return await _context.SaveChangesAsync();
+            _context.Set<T>().Remove(entity);
+            //_context.Set<T>().Attach(entity);
+            //_context.Entry(entity).State = EntityState.Deleted;
 
         }
 

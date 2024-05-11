@@ -7,6 +7,7 @@ using SkiStore.Domain.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,8 +23,7 @@ namespace SkiStore.Data.Identity
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new AppUserConfiguration());
-            builder.ApplyConfiguration(new AddressContiguration());
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly(), x => x.Namespace == "SkiStore.Data.Configurations.Identity");
 
             base.OnModelCreating(builder);
         }

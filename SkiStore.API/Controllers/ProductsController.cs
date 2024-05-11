@@ -79,72 +79,78 @@ namespace SkiStore.API.Controllers
 
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<ProductDTO>> PostProduct(PostProductDTO product)
+        #region Updated later
+        //[HttpPost]
+        //public async Task<ActionResult<ProductDTO>> PostProduct(PostProductDTO product)
 
-        {
-            try
-            {
-                var newProduct = await _productRepository.AddAsync<PostProductDTO, ProductDTO>(product);
-                newProduct.PictureUrl = _configuration["APIURL"] + product.PictureUrl;
+        //{
+        //    try
+        //    {
+        //        var newProduct = await _productRepository.AddAsync<PostProductDTO, ProductDTO>(product);
+        //        newProduct.PictureUrl = _configuration["APIURL"] + product.PictureUrl;
 
-                return CreatedAtAction("GetProduct", new { id = newProduct.Id }, newProduct);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+        //        return CreatedAtAction("GetProduct", new { id = newProduct.Id }, newProduct);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
 
-        }
+        //} 
+        #endregion
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, ProductDTO product)
-        {
-            if (id != product.Id)
-            {
-                return BadRequest();
-            }
-            try
-            {
-                if (await _productRepository.UpdateAsync(id, product) == 0)
-                    return NotFound();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+        #region Update Put Later
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutProduct(int id, ProductDTO product)
+        //{
+        //    if (id != product.Id)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    try
+        //    {
+        //        if (await _productRepository.UpdateAsync(id, product) == 0)
+        //            return NotFound();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!await ProductExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
+        #endregion
         // DELETE: api/Products/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
-        {
+        #region UPDATE DELETE LATER
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteProduct(int id)
+        //{
 
-            var result = await _productRepository.DeleteAsync(id);
+        //    var result = await _productRepository.DeleteAsync(id);
 
-            if (result == 0)
-            {
-                return NotFound();
-            }
+        //    if (result == 0)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
+        #endregion
         private async Task<bool> ProductExists(int id)
         {
             return await _productRepository.Exists(q => q.Id == id);

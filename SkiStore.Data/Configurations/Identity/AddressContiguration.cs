@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SkiStore.Domain.Identity;
 using SkiStore.Domain.ModelLists;
 
-namespace SkiStore.Data.Configurations
+namespace SkiStore.Data.Configurations.Identity
 {
     public class AddressContiguration : IEntityTypeConfiguration<Address>
     {

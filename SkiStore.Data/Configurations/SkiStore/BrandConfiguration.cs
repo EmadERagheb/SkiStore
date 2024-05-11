@@ -1,22 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SkiStore.Domain.Identity;
 using SkiStore.Domain.ModelLists;
+using SkiStore.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SkiStore.Data.Configurations
+namespace SkiStore.Data.Configurations.SkiStore
 {
-    public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
+    public class BrandConfiguration : IEntityTypeConfiguration<Brand>
     {
-        public void Configure(EntityTypeBuilder<AppUser> builder)
+        public void Configure(EntityTypeBuilder<Brand> builder)
         {
-
-
-            builder.HasData(UsersList.Users);
+            builder.HasData(BrandsList.Brands);
         }
     }
 }

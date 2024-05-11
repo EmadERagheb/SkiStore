@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkiStore.Data;
 
@@ -11,9 +12,11 @@ using SkiStore.Data;
 namespace SkiStore.Data.Migrations
 {
     [DbContext(typeof(SkiStoreDbContext))]
-    partial class SkiStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240510171737_OrderTable")]
+    partial class OrderTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,48 +141,6 @@ namespace SkiStore.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeliveryMethod");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryTime = "1-2 Days",
-                            Description = "Fastest delivery time",
-                            Price = 10m,
-                            ShortName = "UPS1",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryTime = "2-5 Days",
-                            Description = "Get it within 5 days",
-                            Price = 5m,
-                            ShortName = "UPS2",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryTime = "5-10 Days",
-                            Description = "Slower but cheap",
-                            Price = 2m,
-                            ShortName = "UPS3",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryTime = "1-2 Weeks",
-                            Description = "Free! You get what you pay for",
-                            Price = 0m,
-                            ShortName = "FREE",
-                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("SkiStore.Domain.Models.OrderAggregate.Order", b =>
@@ -205,6 +166,7 @@ namespace SkiStore.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentIntentId")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
