@@ -1,8 +1,11 @@
-﻿using SkiStore.Domain.Contracts;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
+using SkiStore.Domain.Contracts;
 using SkiStore.Domain.DTOs.Order;
 using SkiStore.Domain.DTOs.Product;
 using SkiStore.Domain.Models;
 using SkiStore.Domain.Models.OrderAggregate;
+using System.Collections.Generic;
 
 namespace SkiStore.Data.Repositories
 {
@@ -10,15 +13,19 @@ namespace SkiStore.Data.Repositories
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBasketRepository _basketRepository;
+        
+        private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public OrderService(IUnitOfWork unitOfWork, IBasketRepository basketRepository)
+        public OrderService(IUnitOfWork unitOfWork, IBasketRepository basketRepository,IConfiguration configuration,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _basketRepository = basketRepository;
-
+            _configuration = configuration;
+            _mapper = mapper;
         }
 
-        public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, ShippingAddress shippingAddress)
+        public async Task<GetOrderDTo> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, ShippingAddress shippingAddress)
         {
             //get basket from the repo
             var basket = await _basketRepository.GetBasketAsync(basketId);
@@ -46,13 +53,42 @@ namespace SkiStore.Data.Repositories
             //save to db
             if (await _unitOfWork.CompleteAysnc() > 0)
             {
-              await  _basketRepository.DeleteBasketAsync(basketId);
-                newOrder.DeliveryMethod=deliveryMethod;
-                return newOrder;
+                await _basketRepository.DeleteBasketAsync(basketId);
+                newOrder.DeliveryMethod = deliveryMethod;
+                var orderDTO = _mapper.Map<GetOrderDTo>(newOrder);
+                return orderDTO;
 
             }
             else return null;
             //return order
+        }
+
+        public async Task<List<GetOrderDTo>> GetOrdersForUserAsync(string email)
+        {
+           var orders=     await _unitOfWork.Repository<Order>().GetAllAsync<GetOrderDTo>(1, 10
+                , c => c.BuyerEmail == email
+                , o => o.CreatedDate
+                , null, nameof(Order.DeliveryMethod));
+            if (orders != null)
+            {
+                orders.ForEach(o => o.OrderItems.ForEach(p => p.PictureUrl = _configuration["APIURL"] + p.PictureUrl));
+            }
+            return orders;
+        }
+
+        public async Task<GetOrderDTo>GetOrderByIdAsync(int id,string email)
+        {
+        var  order= await _unitOfWork.Repository<Order>()
+                .GetAsync<GetOrderDTo>(o => o.Id == id && o.BuyerEmail == email,
+                nameof(Order.DeliveryMethod));
+            if (order is not null) 
+                order.OrderItems.ForEach(p => p.PictureUrl = _configuration["APIURL"] + p.PictureUrl);
+            return order;
+        }
+
+        public async Task<List<DeliveryMethodDTO>> GetDeliveryMethodsAsync()
+        {
+            return await _unitOfWork.Repository<DeliveryMethod>().GetAllAsync<DeliveryMethodDTO>(1, 10);
         }
     }
 }

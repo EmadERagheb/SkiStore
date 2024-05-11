@@ -1,4 +1,6 @@
-﻿namespace SkiStore.Domain.Models.OrderAggregate
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SkiStore.Domain.Models.OrderAggregate
 {
     public class Order : BaseDomainModel
     {
@@ -7,13 +9,15 @@
 
         }
 
+
+
         public Order(List<OrderItem> orderItems, string buyerEmail, ShippingAddress shipToAddress, int deliveryMethodId, decimal subtotal)
         {
             BuyerEmail = buyerEmail;
             ShipToAddress = shipToAddress;
-            DeliveryMethodId = deliveryMethodId;
             OrderItems = orderItems;
             Subtotal = subtotal;
+            DeliveryMethodId = deliveryMethodId;
         }
 
         public string BuyerEmail { get; set; }
@@ -30,14 +34,14 @@
         public List<OrderItem> OrderItems { get; set; }
 
         public decimal Subtotal { get; set; }
-
-        public OrderStatus Status { get; set; } = OrderStatus.Pending;
+        [EnumDataType(typeof(OrderStatus))]
+        public string Status { get; set; } = OrderStatus.Pending.ToString();
 
         public string? PaymentIntentId { get; set; }
 
         public decimal GetTotal()
         {
-            return Subtotal * DeliveryMethod.Price;
+            return Subtotal + DeliveryMethod.Price;
         }
 
 
