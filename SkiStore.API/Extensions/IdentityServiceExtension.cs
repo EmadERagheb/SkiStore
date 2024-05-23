@@ -20,8 +20,8 @@ namespace SkiStore.API.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"), setup =>
                 {
                     setup.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(5), errorNumbersToAdd: null).CommandTimeout(30);
-                }).LogTo(Console.WriteLine, LogLevel.Information);
-                //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                }).LogTo(Console.WriteLine, LogLevel.Information)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
                 if (environment.IsDevelopment())
                 {
                     options.EnableSensitiveDataLogging();

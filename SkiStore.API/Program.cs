@@ -28,7 +28,7 @@ namespace SkiStore.API
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
             // Configure the HTTP request pipeline.
          
-          app.USeSwaggerDecumentation();
+          app.USeSwaggerDocumentation();
             app.UseCors("AllowAll");
             app.UseHttpsRedirection();
             app.UseAuthentication();
