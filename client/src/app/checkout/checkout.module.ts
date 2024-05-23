@@ -11,7 +11,14 @@ import { CheckoutSuccessComponent } from './checkout-success/checkout-success.co
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [CheckoutComponent, CheckoutAddressComponent, CheckoutDeliveryComponent, CheckoutReviewComponent, CheckoutPaymentComponent, CheckoutSuccessComponent],
-  imports: [CommonModule,RouterModule, CheckoutRoutingModule, SharedModule],
+  declarations: [
+    CheckoutComponent,
+    CheckoutAddressComponent,
+    CheckoutDeliveryComponent,
+    CheckoutReviewComponent,
+    CheckoutPaymentComponent,
+    CheckoutSuccessComponent,
+  ],
+  imports: [CommonModule, RouterModule, CheckoutRoutingModule, SharedModule],
 })
 export class CheckoutModule {}

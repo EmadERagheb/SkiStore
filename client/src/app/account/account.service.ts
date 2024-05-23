@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Login } from '../shared/models/login';
 import { Register } from '../shared/models/register';
+import { Address } from '../shared/models/address';
 
 @Injectable({
   providedIn: 'root',
@@ -65,6 +66,15 @@ export class AccountService {
   checkEmailExists(email: string) {
     return this.httpClient.get<boolean>(
       this.baseURL + 'isEmailExists?email=' + email
+    );
+  }
+  getUserAddress() {
+    return this.httpClient.get<Address>(this.baseURL + 'getUserAddress');
+  }
+  updateUserAddress(address: Address) {
+    return this.httpClient.put<Address>(
+      this.baseURL + 'updateAddress',
+      address
     );
   }
 }

@@ -13,10 +13,12 @@ namespace SkiStore.API.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAuthManger _manger;
+      
 
-        public AccountsController(IAuthManger manger)
+        public AccountsController(IAuthManger manger,IUnitOfWork unitOfWork)
         {
             _manger = manger;
+           
         }
         [HttpPost("Login")]
         public async Task<ActionResult<AuthResponseDTO>> Login(LoginDTO loginDTO)
@@ -81,6 +83,7 @@ namespace SkiStore.API.Controllers
             {
 
                 var result = await _manger.UpdateUserAddressAsync(mail, addressDTO);
+             
                 if (!result.Any())
                 {
                     return Ok(addressDTO);
