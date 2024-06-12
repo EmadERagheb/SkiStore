@@ -56,6 +56,8 @@ namespace SkiStore.API.Controllers
 
         }
 
+
+
         [HttpGet("isEmailExists")]
         public async Task<ActionResult<bool>> IsMailExists(string email)
         {
