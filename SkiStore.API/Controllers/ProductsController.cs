@@ -51,7 +51,7 @@ namespace SkiStore.API.Controllers
 
 
 
-            var products = (await _productRepository.GetAllAsync<GetProductDTO>(productPrams.PageIndex, productPrams.PageSize, filter, sortAsc, sortDesc));
+            List<GetProductDTO> products = await _productRepository.GetAllAsync<GetProductDTO>(productPrams.PageIndex, productPrams.PageSize, filter, sortAsc, sortDesc);
             products.ForEach(q => q.PictureUrl = _configuration["APIURL"] + q.PictureUrl);
             var productCount = await _productRepository.GetCountAsync(filter);
             return Ok(new Pagging<GetProductDTO>()

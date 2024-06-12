@@ -27,13 +27,11 @@ namespace SkiStore.API
             app.UseMiddleware<ExceptionMiddleWare>();
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-            }
-          app.USeSwaggerDecumentation();
+         
+          app.USeSwaggerDocumentation();
             app.UseCors("AllowAll");
             app.UseHttpsRedirection();
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

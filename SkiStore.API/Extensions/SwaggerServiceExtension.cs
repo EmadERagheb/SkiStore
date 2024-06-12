@@ -45,7 +45,7 @@ namespace SkiStore.API.Extensions
 
             return services;
         }
-        public static IApplicationBuilder USeSwaggerDecumentation(this IApplicationBuilder app)
+        public static IApplicationBuilder USeSwaggerDocumentation(this IApplicationBuilder app)
         {
             app.UseSwagger();
             app.UseSwaggerUI();

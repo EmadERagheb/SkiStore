@@ -131,7 +131,7 @@ namespace SkiStore.Data.Repositories
             var user = await _manager.Users.Include(q => q.Address).FirstOrDefaultAsync(e => e.Email == email);
             _mapper.Map(addressDTO, user.Address);
             var result = await _manager.UpdateAsync(user);
-
+            
             return result.Errors;
         }
     }

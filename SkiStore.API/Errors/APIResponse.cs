@@ -16,6 +16,7 @@ namespace SkiStore.API.Errors
                 400 => "The provided data does not meet the validation requirements",
                 401 => "Invalid credentials provided. Please log in with valid credentials to access this resource",
                 404 => "The page or resource you requested does not exist",
+                405=>"method not allowed",
                 500 => "We're experiencing technical difficulties. Our team is working to resolve the issue as quickly as possible.",
                 _ => "unhanded error message"
             };

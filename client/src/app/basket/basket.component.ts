@@ -9,10 +9,10 @@ import { BasketItem } from '../shared/models/basket';
 })
 export class BasketComponent {
   constructor(public basketService: BasketService) {}
-  onIncrement(item: BasketItem, quantity: number) {
-    this.basketService.addItemToBasket(item, quantity);
+  onIncrement(event : BasketItem, quantity: number) {
+    this.basketService.addItemToBasket(event, quantity);
   }
-  onDecrement(item: BasketItem, quantity: number) {
-    this.basketService.removeItemFromBasket(item.id, quantity);
+  onDecrement(event:{item: BasketItem, quantity: number}) {
+    this.basketService.removeItemFromBasket(event.item.id,event. quantity);
   }
 }
