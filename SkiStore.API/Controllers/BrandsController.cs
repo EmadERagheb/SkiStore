@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkiStore.Data;
-using SkiStore.Domain.DTOs.Brand;
+using SkiStore.Data.Helper;
 using SkiStore.Domain.Contracts;
+using SkiStore.Domain.DTOs.Brand;
 using SkiStore.Domain.Models;
 
 namespace SkiStore.API.Controllers
@@ -19,13 +15,15 @@ namespace SkiStore.API.Controllers
         private readonly SkiStoreDbContext _context;
         private readonly IBrandRepository _brandRepository;
 
-        public BrandsController(SkiStoreDbContext context,IBrandRepository brandRepository)
+        public BrandsController(SkiStoreDbContext context, IBrandRepository brandRepository)
         {
             _context = context;
-           _brandRepository = brandRepository;
+            _brandRepository = brandRepository;
         }
 
         // GET: api/Brands
+        [Cached(600)]
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetBrandDTO>>> GetBrands()
         {
@@ -34,6 +32,7 @@ namespace SkiStore.API.Controllers
         }
 
         // GET: api/Brands/5
+        [Cached(600)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Brand>> GetBrand(int id)
         {
