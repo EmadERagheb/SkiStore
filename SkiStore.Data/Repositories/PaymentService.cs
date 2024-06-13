@@ -25,6 +25,7 @@ namespace SkiStore.Data.Repositories
         {
             StripeConfiguration.ApiKey = _configuration["StripSettings:SecretKey"];
             var basket = await _basketRepository.GetBasketAsync(basketId);
+            if (basket is null) return null;
             var shippingPrice = 0m;
             if (basket.DeliveryMethodId is not null)
             {
@@ -51,6 +52,7 @@ namespace SkiStore.Data.Repositories
                 };
                var intent= await serviecs.CreateAsync(options);
                 basket.PaymentIntentId= intent.Id;
+                basket.ClientSecret = intent.ClientSecret;
 
             }
             else
