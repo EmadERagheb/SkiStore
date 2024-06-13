@@ -48,10 +48,10 @@ namespace SkiStore.Data.Repositories
                     Amount = (long)basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long)shippingPrice * 100,
                     Currency = "usd",
                     PaymentMethodTypes = new List<string>() { "card" }
-                    
+
                 };
-               var intent= await serviecs.CreateAsync(options);
-                basket.PaymentIntentId= intent.Id;
+                var intent = await serviecs.CreateAsync(options);
+                basket.PaymentIntentId = intent.Id;
                 basket.ClientSecret = intent.ClientSecret;
 
             }
@@ -64,9 +64,29 @@ namespace SkiStore.Data.Repositories
                 };
                 serviecs.Update(basket.PaymentIntentId, options);
             }
-          await  _basketRepository.UpdateBasketAsync(basket);
+            await _basketRepository.UpdateBasketAsync(basket);
             return basket;
 
+        }
+
+        public async Task<Order> UpdateOrderPaymentFielded(string paymentIntent)
+        {
+            var order = await _unitOfWork.Repository<Order>().GetAsync<Order>(o => o.PaymentIntentId == paymentIntent);
+            if (order is null) return null;
+            order.Status = OrderStatus.PaymentFailed.ToString();
+            _unitOfWork.Repository<Order>().Update(order);
+            await _unitOfWork.CompleteAysnc();
+            return order;
+        }
+
+        public async Task<Order> UpdateOrderPaymentSucceeded(string paymentIntent)
+        {
+            var order = await _unitOfWork.Repository<Order>().GetAsync<Order>(o => o.PaymentIntentId == paymentIntent);
+            if (order is null) return null;
+            order.Status = OrderStatus.PaymentRecevied.ToString();
+            _unitOfWork.Repository<Order>().Update(order);
+            await _unitOfWork.CompleteAysnc();
+            return order;
         }
     }
 }

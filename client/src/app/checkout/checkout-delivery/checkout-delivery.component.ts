@@ -12,7 +12,9 @@ import { BasketService } from 'src/app/basket/basket.service';
 export class CheckoutDeliveryComponent implements OnInit {
   @Input() checkoutForm?: FormGroup;
   deliverMethods: DeliveryMethod[] = [];
-
+  get deliveryForm() {
+    return this.checkoutForm?.get('deliveryForm');
+  }
   constructor(
     private checkoutService: CheckoutService,
     private basketService: BasketService

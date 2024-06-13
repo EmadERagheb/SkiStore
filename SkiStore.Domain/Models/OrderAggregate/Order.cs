@@ -11,13 +11,18 @@ namespace SkiStore.Domain.Models.OrderAggregate
 
 
 
-        public Order(List<OrderItem> orderItems, string buyerEmail, ShippingAddress shipToAddress, int deliveryMethodId, decimal subtotal)
+        public Order(List<OrderItem> orderItems, string buyerEmail,
+            ShippingAddress shipToAddress,
+            int deliveryMethodId, 
+            decimal subtotal,
+            string paymentIntentId)
         {
             BuyerEmail = buyerEmail;
             ShipToAddress = shipToAddress;
             OrderItems = orderItems;
             Subtotal = subtotal;
             DeliveryMethodId = deliveryMethodId;
+            PaymentIntentId = paymentIntentId;
         }
 
         public string BuyerEmail { get; set; }
