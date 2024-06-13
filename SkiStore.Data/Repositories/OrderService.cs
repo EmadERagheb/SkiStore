@@ -48,14 +48,27 @@ namespace SkiStore.Data.Repositories
 
 
             //create order 
-            Order newOrder = new Order(orderItems, buyerEmail, shippingAddress, deliveryMethodId, subtotal);
-            _unitOfWork.Repository<Order>().Add(newOrder);
+            var order = await _unitOfWork.Repository<Order>().GetAsync<Order>(o => o.PaymentIntentId == basket.PaymentIntentId);
+            if(order is not null)
+            {
+                order.ShipToAddress = shippingAddress;
+                order.DeliveryMethod= deliveryMethod;
+                order.Subtotal= subtotal;
+                _unitOfWork.Repository<Order>().Update(order);
+            }
+            else
+            {
+             order = new Order(orderItems, buyerEmail, shippingAddress, deliveryMethodId, subtotal,basket.PaymentIntentId);
+            _unitOfWork.Repository<Order>().Add(order);
+
+            }
             //save to db
             if (await _unitOfWork.CompleteAysnc() > 0)
             {
-                await _basketRepository.DeleteBasketAsync(basketId);
-                newOrder.DeliveryMethod = deliveryMethod;
-                var orderDTO = _mapper.Map<GetOrderDTo>(newOrder);
+                //await _basketRepository.DeleteBasketAsync(basketId);
+                //order.DeliveryMethod = deliveryMethod;
+                order.DeliveryMethod=deliveryMethod;
+                var orderDTO = _mapper.Map<GetOrderDTo>(order);
                 return orderDTO;
 
             }

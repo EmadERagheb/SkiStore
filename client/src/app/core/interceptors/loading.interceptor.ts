@@ -16,9 +16,13 @@ export class LoadingInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    if (!request.url.includes('isEmailExists')) {
-      this.loadingService.busy();
+    if (
+      !request.url.includes('isEmailExists') ||
+      (request.method === 'POST' && request.url.includes('Orders'))
+    ) {
+      return next.handle(request);
     }
+    this.loadingService.busy();
     return next.handle(request).pipe(
       delay(1000),
       finalize(() => this.loadingService.idle())
