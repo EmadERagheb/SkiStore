@@ -28,7 +28,7 @@ namespace SkiStore.Data.Repositories
                 return null;
             }
             else
-                return chachedResponse;
+                return chachedResponse.ToString().Split("{\"value\":")[1].Split(",\"formatters\":")[0];
         }
     }
 }
