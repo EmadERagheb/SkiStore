@@ -25,6 +25,7 @@ namespace SkiStore.API.Controllers
         }
 
         // GET: api/Products
+        [Cached(600)]
         [HttpGet]
         public async Task<ActionResult<Pagging<GetProductDTO>>> GetProducts([FromQuery] ProductSpecPrams productPrams)
         {
@@ -64,6 +65,7 @@ namespace SkiStore.API.Controllers
         }
 
         // GET: api/Products/5
+        [Cached(600)]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetProductDTO>> GetProduct(int id)
         {

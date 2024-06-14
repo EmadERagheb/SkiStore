@@ -4,6 +4,7 @@ using SkiStore.Data;
 using SkiStore.Domain.DTOs.ProductType;
 using SkiStore.Domain.Contracts;
 using SkiStore.Domain.Models;
+using SkiStore.Data.Helper;
 
 namespace SkiStore.API.Controllers
 {
@@ -21,6 +22,9 @@ namespace SkiStore.API.Controllers
         }
 
         // GET: api/ProductTypes
+
+
+        [Cached(600)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetProductTypeDTO>>> GetProductTypes()
         {
@@ -28,6 +32,8 @@ namespace SkiStore.API.Controllers
         }
 
         // GET: api/ProductTypes/5
+
+        [Cached(600)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductType>> GetProductType(int id)
         {
@@ -43,6 +49,7 @@ namespace SkiStore.API.Controllers
 
         // PUT: api/ProductTypes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductType(int id, ProductType productType)
         {

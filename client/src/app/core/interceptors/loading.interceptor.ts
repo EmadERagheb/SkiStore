@@ -19,13 +19,17 @@ export class LoadingInterceptor implements HttpInterceptor {
     if (
       !request.url.includes('isEmailExists') ||
       (request.method === 'POST' && request.url.includes('Orders'))
+      ||(request.method==="DELETE")
     ) {
       return next.handle(request);
     }
     this.loadingService.busy();
     return next.handle(request).pipe(
       delay(1000),
-      finalize(() => this.loadingService.idle())
+      finalize(() => {
+        this.loadingService.idle();
+        console.log('inside interceptor');
+      })
     );
   }
 }
