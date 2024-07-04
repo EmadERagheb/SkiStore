@@ -17,6 +17,17 @@ namespace SkiStore.Domain.ModelLists
                 NormalizedUserName="emaderagheb@gmail.com".ToUpper(),
                 EmailConfirmed=true,
                 PasswordHash=(new PasswordHasher<AppUser>()).HashPassword(null,"Pa$$word123"),
+            },  
+            new AppUser()
+            {
+                Id="21c033a9-a5d5-4fee-97e3-5d8c51563060",
+                DisplayName="Public",
+                Email="public@skiNet.com",
+                NormalizedEmail="public@skiNet.com".ToUpper(),
+                UserName="public@skiNet.com",
+                NormalizedUserName="public@skiNet.com".ToUpper(),
+                EmailConfirmed=true,
+                PasswordHash=(new PasswordHasher<AppUser>()).HashPassword(null,"Pa$$word123"),
             },
            
         };
