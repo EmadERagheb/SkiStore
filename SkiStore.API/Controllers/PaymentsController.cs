@@ -13,7 +13,10 @@ namespace SkiStore.API.Controllers
     {
         private readonly IPaymentService _paymentService;
         private readonly ILogger<PaymentsController> _logger;
-        private const string _whSecret = "whsec_85c03b0c6f761d8ed02895c13c4c4916a136f67ac6ad4955c3c5d0f4ed39ddf0";
+        //Development
+        //private const string _whSecret = "whsec_85c03b0c6f761d8ed02895c13c4c4916a136f67ac6ad4955c3c5d0f4ed39ddf0";
+        //production
+        private const string _whSecret = "whsec_EIJKabWxSGNIjdj3VUH5zPXRlV0zrw5V";
 
 
         public PaymentsController(IPaymentService paymentService, ILogger<PaymentsController> logger)
