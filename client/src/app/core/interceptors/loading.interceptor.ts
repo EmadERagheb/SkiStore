@@ -22,7 +22,7 @@ export class LoadingInterceptor implements HttpInterceptor {
       (request.method === 'POST' && request.url.includes('Orders')) ||
       request.method === 'DELETE'
     ) {
-      console.log("no loading interceptor")
+     
       return next.handle(request);
     }
     this.loadingService.busy();
@@ -30,7 +30,7 @@ export class LoadingInterceptor implements HttpInterceptor {
       (environment.production ? identity : delay(1000),
       finalize(() => {
         this.loadingService.idle();
-        console.log('inside interceptor');
+        
       }))
     );
   }

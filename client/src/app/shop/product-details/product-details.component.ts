@@ -28,7 +28,7 @@ export class ProductDetailsComponent implements OnInit {
   }
   loadProduct() {
     const id = this.activeRouter.snapshot.paramMap.get('id');
-    console.log(id);
+   
     if (id)
       this.shopService.getProduct(+id).subscribe({
         next: (prod) => {
@@ -44,8 +44,7 @@ export class ProductDetailsComponent implements OnInit {
             },
           });
         },
-        error: (error) => console.log(error),
-        complete: () => console.log('product loaded'),
+   
       });
   }
 

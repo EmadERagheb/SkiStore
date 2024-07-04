@@ -30,7 +30,7 @@ export class CheckoutAddressComponent implements OnInit {
   }
   updateUserAddress(){
     let address = this.addressForm?.value as Address
-    console.log(address)
+   
     this.accountService.updateUserAddress(address).subscribe({
       next:(address)=> {
         this.addressForm?.reset(address)

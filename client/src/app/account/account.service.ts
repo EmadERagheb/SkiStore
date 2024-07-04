@@ -25,7 +25,7 @@ export class AccountService {
       let headers = new HttpHeaders();
       headers = headers.set('Content-Type', 'application/json; charset=utf-8');
       headers = headers.set('Authorization', `Bearer ${token}`);
-      console.log(headers);
+    
       return this.httpClient
         .get<User>(this.baseURL + 'getCurrentUser', { headers })
         .pipe(

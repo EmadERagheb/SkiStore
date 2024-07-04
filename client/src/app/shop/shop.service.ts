@@ -61,7 +61,7 @@ export class ShopService {
     return this.shopParams;
   }
   getProduct(id: number) {
-    console.log(this.productCache);
+    
     const product = [...this.productCache.values()].reduce(
       (acc, pagingResult) => {
         return { ...acc, ...pagingResult.data.find((x) => x.id === id) };

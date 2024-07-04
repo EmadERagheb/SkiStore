@@ -96,7 +96,7 @@ export class CheckoutPaymentComponent implements OnInit {
         this.toastrService.error(paymentResult.error.message);
       }
     } catch (error: any) {
-      console.log(error);
+    
       this.toastrService.error(error.message);
     } finally {
       this.loading = false;

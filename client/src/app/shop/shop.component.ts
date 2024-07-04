@@ -37,8 +37,7 @@ export class ShopComponent implements OnInit {
         this.products = response.data;
         this.totalItems = response.count;
       },
-      error: (error) => console.log(error.message),
-      complete: () => console.log('product loaded'),
+      
     });
   }
   getBrands() {
