@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using SkiStore.API.Extensions;
 using SkiStore.API.MiddleWares;
 using SkiStore.Data;
@@ -23,6 +24,12 @@ namespace SkiStore.API
 
             var app = builder.Build();
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Content")),
+                RequestPath = "/Content"
+
+            });
             // this is used to handle 404 endpoints
             app.UseMiddleware<ExceptionMiddleWare>();
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
@@ -36,6 +43,7 @@ namespace SkiStore.API
 
 
             app.MapControllers();
+            app.MapFallbackToController("Index", "FallBack");
 
 
             #region Insure DataBase Exists And Seeds Before Run Application

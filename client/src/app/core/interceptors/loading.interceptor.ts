@@ -5,8 +5,9 @@ import {
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Observable, delay, finalize } from 'rxjs';
+import { Observable, delay, finalize, identity } from 'rxjs';
 import { LoadingService } from '../services/loading.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
@@ -18,18 +19,18 @@ export class LoadingInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     if (
       !request.url.includes('isEmailExists') ||
-      (request.method === 'POST' && request.url.includes('Orders'))
-      ||(request.method==="DELETE")
+      (request.method === 'POST' && request.url.includes('Orders')) ||
+      request.method === 'DELETE'
     ) {
       return next.handle(request);
     }
     this.loadingService.busy();
     return next.handle(request).pipe(
-      delay(1000),
+      (environment.production ? identity : delay(1000),
       finalize(() => {
         this.loadingService.idle();
         console.log('inside interceptor');
-      })
+      }))
     );
   }
 }

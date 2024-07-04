@@ -24,4 +24,8 @@
     <None Include="wwwroot\images\.DS_Store" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Content\" />
+  </ItemGroup>
+
 </Project>
