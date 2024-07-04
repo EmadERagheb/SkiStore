@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace SkiStore.Data.Configurations.Identity
 {
-    public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
-    {
-        public void Configure(EntityTypeBuilder<AppUser> builder)
-        {
+    //public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
+    //{
+    //    public void Configure(EntityTypeBuilder<AppUser> builder)
+    //    {
 
 
-            builder.HasData(UsersList.Users);
-        }
-    }
+    //        builder.HasData(UsersList.Users);
+    //    }
+    //}
 }

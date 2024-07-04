@@ -43,13 +43,35 @@ namespace SkiStore.API.Extensions
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IPaymentService,PaymentService>();
+            services.AddScoped<IPaymentService, PaymentService>();
             #endregion
             #region Redis
             services.AddSingleton<IConnectionMultiplexer>(c =>
             {
-                var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
-                return ConnectionMultiplexer.Connect(options);
+
+
+                if (environment.IsProduction())
+                {
+
+                    var redisConnectionString = configuration["RedisCacheSettings:ConnectionString"];
+                    var redisUri = new Uri(redisConnectionString);
+
+                    var options = new ConfigurationOptions
+                    {
+                        EndPoints = { $"{redisUri.Host}:{redisUri.Port}" },
+                        Password = redisUri.UserInfo.Split(':')[1],
+                        Ssl = redisUri.Scheme == "rediss",
+                        AbortOnConnectFail = false
+                    };
+                    return ConnectionMultiplexer.Connect(options);
+                }
+                else
+                {
+                    var options = ConfigurationOptions.Parse(configuration["RedisCacheSettings:ConnectionString"]);
+                    return ConnectionMultiplexer.Connect(options);
+
+                }
+
             });
             #endregion
             #region AutoMapper

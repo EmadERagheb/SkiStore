@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace SkiStore.Data.Configurations.SkiStore
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<Product>
-    {
-        public void Configure(EntityTypeBuilder<Product> builder)
-        {
-            builder.HasData(ProductList.Products);
-        }
-    }
+    //public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    //{
+    //    public void Configure(EntityTypeBuilder<Product> builder)
+    //    {
+    //        builder.HasData(ProductList.Products);
+    //    }
+    //}
 }

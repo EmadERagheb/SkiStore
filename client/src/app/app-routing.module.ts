@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, provideRouter, withHashLocation } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ErrorTestComponent } from './core/error-test/error-test.component';
 import { NotFoundComponent } from './core/not-found/not-found.component';
@@ -27,5 +27,8 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes), CommonModule],
   exports: [RouterModule],
+  providers: [
+    provideRouter(routes, withHashLocation())
+  ]
 })
 export class AppRoutingModule {}

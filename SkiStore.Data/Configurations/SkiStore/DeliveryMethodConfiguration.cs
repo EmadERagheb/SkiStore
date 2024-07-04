@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace SkiStore.Data.Configurations.SkiStore
 {
-    public class DeliveryMethodConfiguration : IEntityTypeConfiguration<DeliveryMethod>
-    {
-        public void Configure(EntityTypeBuilder<DeliveryMethod> builder)
-        {
-           builder.HasData(DeliveryMethodList.DeliveryMethods);
-        }
-    }
+    //public class DeliveryMethodConfiguration : IEntityTypeConfiguration<DeliveryMethod>
+    //{
+    //    public void Configure(EntityTypeBuilder<DeliveryMethod> builder)
+    //    {
+    //       builder.HasData(DeliveryMethodList.DeliveryMethods);
+    //    }
+    //}
 }
