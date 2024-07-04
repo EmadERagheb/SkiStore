@@ -75,7 +75,7 @@ export class ShopService {
     if (this.brands.length > 0) return of(this.brands);
     return this.httpClient.get<Brand[]>(this.baseUrl + 'Brands').pipe(
       map((response) => {
-        this.brands;
+        this.brands=response;
         return response;
       })
     );
