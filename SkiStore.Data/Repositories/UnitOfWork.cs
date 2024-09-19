@@ -16,7 +16,7 @@ namespace SkiStore.Data.Repositories
             _context = context;
             _mapper = mapper;
         }
-        public async Task<int> CompleteAysnc()
+        public async Task<int> CompleteAsync()
         {
       return  await _context.SaveChangesAsync();
         }

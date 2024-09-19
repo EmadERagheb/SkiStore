@@ -75,7 +75,7 @@ namespace SkiStore.Data.Repositories
             if (order is null) return null;
             order.Status = OrderStatus.PaymentFailed.ToString();
             _unitOfWork.Repository<Order>().Update(order);
-            await _unitOfWork.CompleteAysnc();
+            await _unitOfWork.CompleteAsync();
             return order;
         }
 
@@ -85,7 +85,7 @@ namespace SkiStore.Data.Repositories
             if (order is null) return null;
             order.Status = OrderStatus.PaymentRecevied.ToString();
             _unitOfWork.Repository<Order>().Update(order);
-            await _unitOfWork.CompleteAysnc();
+            await _unitOfWork.CompleteAsync();
             return order;
         }
     }

@@ -63,7 +63,7 @@ namespace SkiStore.Data.Repositories
 
             }
             //save to db
-            if (await _unitOfWork.CompleteAysnc() > 0)
+            if (await _unitOfWork.CompleteAsync() > 0)
             {
                 //await _basketRepository.DeleteBasketAsync(basketId);
                 //order.DeliveryMethod = deliveryMethod;
@@ -84,7 +84,7 @@ namespace SkiStore.Data.Repositories
                 , null, nameof(Order.DeliveryMethod));
             if (orders != null)
             {
-                orders.ForEach(o => o.OrderItems.ForEach(p => p.PictureUrl = _configuration["APIURL"] + p.PictureUrl));
+                orders.ForEach(o => o.OrderItems.ForEach(p => p.PictureUrl = _configuration["APIURL"]+"/" + p.PictureUrl));
             }
             return orders;
         }
@@ -95,7 +95,7 @@ namespace SkiStore.Data.Repositories
                 .GetAsync<GetOrderDTo>(o => o.Id == id && o.BuyerEmail == email,
                 nameof(Order.DeliveryMethod));
             if (order is not null) 
-                order.OrderItems.ForEach(p => p.PictureUrl = _configuration["APIURL"] + p.PictureUrl);
+                order.OrderItems.ForEach(p => p.PictureUrl = _configuration["APIURL"] +"/"+ p.PictureUrl);
             return order;
         }
 

@@ -10,6 +10,6 @@ namespace SkiStore.Domain.Contracts
     public interface IUnitOfWork:IDisposable
     {
         IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseDomainModel;
-        Task<int> CompleteAysnc();
+        Task<int> CompleteAsync();
     }
 }
