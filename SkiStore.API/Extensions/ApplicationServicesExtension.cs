@@ -53,17 +53,9 @@ namespace SkiStore.API.Extensions
                 if (environment.IsProduction())
                 {
 
-                    var redisConnectionString = configuration["RedisCacheSettings:ConnectionString"];
-                    var redisUri = new Uri(redisConnectionString);
+                    var redisConnectionString = configuration["RedisCacheSettings:ConnectionString"]!;
 
-                    var options = new ConfigurationOptions
-                    {
-                        EndPoints = { $"{redisUri.Host}:{redisUri.Port}" },
-                        Password = redisUri.UserInfo.Split(':')[1],
-                        Ssl = redisUri.Scheme == "rediss",
-                        AbortOnConnectFail = false
-                    };
-                    return ConnectionMultiplexer.Connect(options);
+                    return ConnectionMultiplexer.Connect(redisConnectionString);
                 }
                 else
                 {
